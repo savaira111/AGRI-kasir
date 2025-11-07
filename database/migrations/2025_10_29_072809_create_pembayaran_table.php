@@ -10,11 +10,11 @@ return new class extends Migration
     {
         Schema::create('pembayaran', function (Blueprint $table) {
             $table->id('id_pembayaran');
-            $table->unsignedBigInteger('id_transaksi');
-            $table->string('metode_pembayaran'); // contoh: Tunai
-            $table->decimal('total_bayar', 10, 2);
-            $table->decimal('kembalian', 10, 2)->default(0);
-            $table->timestamps();
+            $table->foreignId('id_transaksi')->constrained('transaksi_penjualan')->onDelete('cascade');
+            $table->string('metode_pembayaran');
+            $table->integer('jumlah_bayar');
+            $table->integer('kembalian')->default(0);
+            $table->timestamp('tanggal_pembayaran')->useCurrent();
 
             // relasi ke transaksi_penjualan
             $table->foreign('id_transaksi')

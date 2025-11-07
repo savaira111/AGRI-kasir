@@ -15,8 +15,9 @@ class TransaksiPenjualan extends Model
     protected $fillable = [
         'id_user',
         'tanggal_transaksi',
-        'total_transaksi',
-        'status_transaksi',
+        'total_harga',
+        'status',
+        'metode_pembayaran',
     ];
 
     // relasi ke user
@@ -26,7 +27,7 @@ class TransaksiPenjualan extends Model
     }
 
     // relasi ke detail transaksi
-    public function detail()
+    public function detailTransaksi()
     {
         return $this->hasMany(DetailTransaksi::class, 'id_transaksi');
     }
@@ -43,7 +44,7 @@ class TransaksiPenjualan extends Model
         return $this->hasOne(LaporanPenjualan::class, 'id_transaksi');
     }
 
-    // relasi ke cetak struk
+    // relasi ke cetak struk (opsional)
     public function struk()
     {
         return $this->hasOne(CetakStruk::class, 'id_transaksi');

@@ -10,16 +10,15 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $table = 'user'; // karena tabel kamu namanya 'user', bukan 'users'
+    protected $table = 'users';
     protected $primaryKey = 'id_user';
 
     protected $fillable = [
-        'nama_user',
+        'name',
         'username',
         'email',
         'password',
         'role',
-        'alamat',
     ];
 
     protected $hidden = [
@@ -27,12 +26,9 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'password' => 'hashed',
-        ];
-    }
+    protected $casts = [
+        'password' => 'hashed',
+    ];
 
     // Relasi ke tabel transaksi_penjualan
     public function transaksi()

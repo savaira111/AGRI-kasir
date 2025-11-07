@@ -7,48 +7,34 @@ use Illuminate\Database\Eloquent\Model;
 
 class Produk extends Model
 {
-    /** @use HasFactory<\Database\Factories\ProdukFactory> */
     use HasFactory;
 
-    /**
-     * Nama tabel yang digunakan model ini.
-     *
-     * @var string
-     */
     protected $table = 'produk';
 
-    /**
-     * Atribut yang bisa diisi (mass assignable).
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'nama_produk',
-        'harga',
+        'kategori',
+        'harga_jual',
         'stok',
-        'kategori_id',
+        'foto_produk',
+        'deskripsi_produk',
+        'status_produk',
+        'tanggal_input',
     ];
 
-    /**
-     * Atribut yang disembunyikan.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'created_at',
         'updated_at',
     ];
 
-    /**
-     * Atribut yang dikonversi (cast).
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    protected $casts = [
+        'harga_jual' => 'integer',
+        'stok' => 'integer',
+    ];
+
+    // Relasi ke detail transaksi
+    public function detailTransaksi()
     {
-        return [
-            'harga' => 'integer',
-            'stok' => 'integer',
-        ];
+        return $this->hasMany(DetailTransaksi::class, 'id_produk');
     }
 }

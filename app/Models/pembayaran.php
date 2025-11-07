@@ -15,13 +15,12 @@ class Pembayaran extends Model
     // Primary key tabel
     protected $primaryKey = 'id_pembayaran';
 
-    // Kolom yang boleh diisi (mass assignment)
+    // Kolom yang bisa diisi (mass assignable)
     protected $fillable = [
         'id_transaksi',
         'metode_pembayaran',
-        'nominal_bayar',
+        'jumlah_bayar',
         'kembalian',
-        'status_pembayaran',
         'tanggal_pembayaran',
     ];
 
@@ -29,19 +28,5 @@ class Pembayaran extends Model
     public function transaksi()
     {
         return $this->belongsTo(TransaksiPenjualan::class, 'id_transaksi');
-    }
-
-    // Fungsi buat proses pembayaran (contoh sederhana)
-    public function prosesPembayaran()
-    {
-        // Misal: ubah status pembayaran jadi 'Lunas'
-        $this->status_pembayaran = 'Lunas';
-        $this->save();
-    }
-
-    // Fungsi buat hitung kembalian
-    public function hitungKembalian()
-    {
-        return $this->nominal_bayar - $this->transaksi->total_transaksi;
     }
 }
