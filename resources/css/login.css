@@ -1,0 +1,40 @@
+/* 🌸 Styling tampilan login biar mirip sama desain UI */
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+.login-container {
+    height: 100vh;
+    width: 100%;
+}
+
+.login-box {
+    background-color: #ffffff;
+    width: 50%;
+}
+
+.logo {
+    width: 80px;
+}
+
+.btn-primary {
+    background-color: #4A90E2;
+    border: none;
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #357ABD;
+}
+
+.bg-side {
+    overflow: hidden;
+}
+
+.bg-img {
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+}
