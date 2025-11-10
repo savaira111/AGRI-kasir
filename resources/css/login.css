@@ -1,83 +1,62 @@
-/* 🌿 Style Utama */
+/* 🌾 Tampilan Login AGRI */
+
 body, html {
     height: 100%;
     margin: 0;
     font-family: 'Poppins', sans-serif;
-    background: url('../images/bg-login.jpg') no-repeat center center/cover;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
-/* 🌾 Kotak Transparan Tengah */
-.login-container {
+/* Background sawah */
+.login-bg {
+    background: url('/images/bg-login.jpg') no-repeat center center/cover;
+}
+
+/* Card tengah transparan */
+.login-card {
     background: rgba(255, 255, 255, 0.35);
-    backdrop-filter: blur(6px);
-    padding: 50px 60px;
+    backdrop-filter: blur(10px);
     border-radius: 20px;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
-    width: 400px;
-    text-align: center;
-}
-
-/* 🌿 Logo */
-.logo {
-    width: 80px;
-    margin-bottom: 10px;
-}
-
-/* 📝 Label Input */
-.form-label {
-    font-weight: bold;
-    text-align: left;
-    display: block;
-    color: #222;
-    margin-bottom: 5px;
-}
-
-/* 🌱 Input */
-.custom-input {
-    background-color: #6ca66c;
+    width: 380px;
     border: none;
-    border-radius: 10px;
+}
+
+/* Logo */
+.login-logo {
+    width: 80px;
+}
+
+/* Input */
+.custom-input {
+    background-color: #6fa36f;
+    border: none;
+    color: white;
+    border-radius: 12px;
     padding: 12px;
-    color: #fff;
-    width: 100%;
-    font-size: 14px;
 }
 
 .custom-input::placeholder {
-    color: #e2e2e2;
+    color: #e8f5e9;
 }
 
 .custom-input:focus {
     outline: none;
-    background-color: #5a945a;
+    box-shadow: none;
+    background-color: #5c915c;
 }
 
-/* 🌼 Tombol Login */
+/* Tombol Kuning */
 .btn-custom {
-    background: #f9d43a;
+    background-color: #FCCD2A;
     color: #333;
-    font-weight: bold;
+    font-weight: 600;
     border: none;
     border-radius: 30px;
-    padding: 12px;
-    width: 150px;
-    margin-top: 15px;
-    transition: all 0.3s ease;
+    padding: 10px 0;
+    width: 100%;
+    transition: 0.3s ease;
 }
 
 .btn-custom:hover {
-    background: #f2c733;
+    background-color: #e6b825;
     transform: translateY(-2px);
-    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-}
-
-/* 🌤️ Responsive */
-@media (max-width: 600px) {
-    .login-container {
-        width: 90%;
-        padding: 30px 20px;
-    }
 }

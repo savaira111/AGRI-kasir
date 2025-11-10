@@ -13,6 +13,4 @@ Route::post('/login', function () {
 })->name('login.process');
 
 // Dashboard
-Route::get('/dashboard', function () {
-    return view('dashboard.index');
-})->name('dashboard');
+Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');

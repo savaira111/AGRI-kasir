@@ -1,74 +1,41 @@
-/* 🌾 Style Halaman Login */
-body, html {
-    height: 100%;
-    margin: 0;
-    font-family: 'Poppins', sans-serif;
-    background: url('../../images/bg-login.jpg') no-repeat center center/cover;
-}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login AGRI</title>
 
-/* 🌿 Kotak Form Transparan */
-.login-container {
-    background: rgba(255, 255, 255, 0.35);
-    backdrop-filter: blur(8px);
-    padding: 40px 50px;
-    border-radius: 20px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-    text-align: center;
-}
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-/* Label */
-.form-label {
-    font-weight: bold;
-    color: #222;
-    text-align: left;
-    display: block;
-}
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ asset('css/auth/login.css') }}">
+</head>
+<body>
+    <div class="d-flex justify-content-center align-items-center min-vh-100 login-bg">
+        <div class="card login-card text-center p-5 shadow-lg">
+            <img src="{{ asset('images/logo-kasir.png') }}" alt="" class="login-logo mx-auto mb-3">
 
-/* Input hijau */
-.form-control {
-    background-color: #6ca66c;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    padding: 12px;
-}
+            <form id="loginForm">
+                <div class="mb-3 text-start">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" id="username" class="form-control custom-input" placeholder="Username" required>
+                </div>
 
-.form-control::placeholder {
-    color: #e6e6e6;
-}
+                <div class="mb-3 text-start">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" id="password" class="form-control custom-input" placeholder="Password" required>
+                </div>
 
-.form-control:focus {
-    outline: none;
-    background-color: #5a945a;
-    box-shadow: none;
-}
+               <button type="submit" class="btn btn-custom w-100 mt-3">sign in</button>
 
-/* Tombol kuning */
-.btn-dark {
-    background-color: #f9d43a !important;
-    color: #333 !important;
-    font-weight: bold;
-    border: none;
-    border-radius: 30px;
-    padding: 10px;
-    margin-top: 10px;
-    transition: all 0.3s ease;
-}
+            </form>
+        </div>
+    </div>
 
-.btn-dark:hover {
-    background-color: #f0c933 !important;
-    transform: translateY(-2px);
-}
-
-/* Tambah logo */
-.login-logo {
-    width: 80px;
-    margin-bottom: 15px;
-}
-
-/* Responsif */
-@media (max-width: 576px) {
-    .login-container {
-        padding: 30px 20px;
-    }
-}
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ asset('js/auth/login.js') }}"></script>
+</body>
+</html>
