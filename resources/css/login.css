@@ -1,40 +1,83 @@
-/* 🌸 Styling tampilan login biar mirip sama desain UI */
+/* 🌿 Style Utama */
 body, html {
     height: 100%;
     margin: 0;
     font-family: 'Poppins', sans-serif;
+    background: url('../images/bg-login.jpg') no-repeat center center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
+/* 🌾 Kotak Transparan Tengah */
 .login-container {
-    height: 100vh;
-    width: 100%;
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(6px);
+    padding: 50px 60px;
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
+    width: 400px;
+    text-align: center;
 }
 
-.login-box {
-    background-color: #ffffff;
-    width: 50%;
-}
-
+/* 🌿 Logo */
 .logo {
     width: 80px;
+    margin-bottom: 10px;
 }
 
-.btn-primary {
-    background-color: #4A90E2;
+/* 📝 Label Input */
+.form-label {
+    font-weight: bold;
+    text-align: left;
+    display: block;
+    color: #222;
+    margin-bottom: 5px;
+}
+
+/* 🌱 Input */
+.custom-input {
+    background-color: #6ca66c;
     border: none;
-    transition: 0.3s;
-}
-
-.btn-primary:hover {
-    background-color: #357ABD;
-}
-
-.bg-side {
-    overflow: hidden;
-}
-
-.bg-img {
+    border-radius: 10px;
+    padding: 12px;
+    color: #fff;
     width: 100%;
-    height: 100vh;
-    object-fit: cover;
+    font-size: 14px;
+}
+
+.custom-input::placeholder {
+    color: #e2e2e2;
+}
+
+.custom-input:focus {
+    outline: none;
+    background-color: #5a945a;
+}
+
+/* 🌼 Tombol Login */
+.btn-custom {
+    background: #f9d43a;
+    color: #333;
+    font-weight: bold;
+    border: none;
+    border-radius: 30px;
+    padding: 12px;
+    width: 150px;
+    margin-top: 15px;
+    transition: all 0.3s ease;
+}
+
+.btn-custom:hover {
+    background: #f2c733;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+}
+
+/* 🌤️ Responsive */
+@media (max-width: 600px) {
+    .login-container {
+        width: 90%;
+        padding: 30px 20px;
+    }
 }
