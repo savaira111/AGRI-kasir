@@ -1,16 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\KelolaProdukController;
 
-// Halaman login
+
 Route::get('/', function () {
-    return view('auth.login');
-})->name('login');
+    return view('dashboard');
+});
 
-// Proses "login" palsu (langsung masuk dashboard aja)
-Route::post('/login', function () {
-    return redirect()->route('dashboard')->with('success', 'Selamat anda telah berhasil login');
-})->name('login.process');
+Route::get('/kelola-produk', [KelolaProdukController::class, 'index'])->name('kelola.produk');
 
-// Dashboard
-Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
