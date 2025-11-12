@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelola Produk - AGRI</title>
+    <title>Produk - AGRI</title>
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -22,23 +22,22 @@
         
         <div>
             <div class="text-center mb-5">
-                <img src="{{ asset('images/logo-kasir.png') }}" alt="Logo" 
-                     style="width: 70px; height: 70px; border-radius: 50%;">
-                <h4 class="mt-2 fw-bold">AGRI</h4>
+                <img src="{{ asset('image/logo-kasir.png') }}" alt="Logo" 
+                     style="width: 170px; height: 170px; border-radius: 50%;">
             </div>
 
             <ul class="list-unstyled mt-5">
                 <li class="mb-3">
                     <a href="#" class="d-block text-black text-decoration-none p-2 rounded fw-bold" 
                        style="background-color: #FCCD2A;">
-                       <i class="bi bi-box-seam me-2"></i> Kelola produk
+                       <i class="bi bi-box-seam me-2"></i> Produk
                     </a>
                 </li>
                 <li class="mb-3">
                     <a href="#" class="d-block text-black text-decoration-none p-2 rounded"
                        onmouseover="this.style.backgroundColor='#FCCD2A';"
                        onmouseout="this.style.backgroundColor='transparent';">
-                       <i class="bi bi-people-fill me-2"></i> Kelola User
+                       <i class="bi bi-people-fill me-2"></i> User
                     </a>
                 </li>
                 <li class="mb-3">
@@ -66,7 +65,7 @@
         </div>
 
         <div class="text-center mb-3" style="color: gray; font-size: 0.9rem;">
-            <i class=""></i> Kelola Produk
+            <i class=""></i> Produk
         </div>
     </div>
     <!-- 🌿 END SIDEBAR -->
@@ -75,18 +74,35 @@
     <!-- MAIN CONTENT -->
     <div class="flex-grow-1 p-4">
 
-        <!-- Header -->
-        <div class="d-flex justify-content-between align-items-center p-4 rounded"
-             style="background-color: #B9E4C9;">
-            <h4 class="fw-bold">Kelola Produk Owner</h4>
-            <div>
-                <input type="text" class="form-control d-inline-block" placeholder="Cari produk..."
-                       style="width: 250px; display: inline;">
-                <button class="btn btn-warning ms-2 fw-bold text-white" style="background-color:#FCCD2A;">
-                    <i class="bi bi-plus-circle me-1"></i> Tambah
-                </button>
-            </div>
-        </div>
+       <div class="d-flex justify-content-center align-items-center mb-4">
+    <div class="input-group" style="width: 1000px;">
+        <!-- Icon Search -->
+        <span class="input-group-text" 
+            style="background-color: #C0EBA6; border: none; border-radius: 20px 0 0 20px;">
+            <i class="bi bi-search" style="color: #333;"></i>
+        </span>
+
+        <!-- Input -->
+        <input type="text" class="form-control" placeholder="Search..."
+            style="background-color: #C0EBA6; border: none; color: #333;">
+
+        <!-- Profile di Dalam Search -->
+        <span class="input-group-text" 
+            style="background-color: #C0EBA6; border: none; border-radius: 0 20px 20px 0;">
+            <img src="{{ asset('image/profile.png') }}" alt="Profile"
+                style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid white;">
+        </span>
+    </div>
+</div>
+
+            
+            <div class="d-flex justify-content-end mb-3">
+        <button class="btn btn-warning fw-bold d-flex align-items-center"
+                style="color: #000000; font-family: 'Rubik', sans-serif; border-radius: 12px;">
+            <i class="bi bi-plus-circle me-1"></i> Tambah
+        </button>
+    </div>
+
 
         <!-- Tabel Produk -->
         <div class="mt-4 bg-light p-3 rounded shadow-sm">
@@ -111,9 +127,24 @@
                         <td>Pupuk</td>
                         <td>25</td>
                         <td>
-                            <button class="btn btn-sm btn-outline-success me-1"><i class="bi bi-pencil"></i></button>
-                            <button class="btn btn-sm btn-outline-danger me-1"><i class="bi bi-trash"></i></button>
-                            <button class="btn btn-sm btn-outline-warning"><i class="bi bi-eye"></i></button>
+                           <div class="d-flex justify-content-center align-items-center gap-3">
+
+                               
+                            <!-- Tombol Edit -->
+                            <button class="btn crud-btn" style="background-color: #FCCD2A;">
+                                <i class="bi bi-pencil-fill"></i>
+                            </button>
+
+                            <!-- Tombol Hapus -->
+                            <button class="btn crud-btn" style="background-color: #FCCD2A;">
+                                <i class="bi bi-trash3-fill"></i>
+                            </button>
+
+                            <!-- Tombol Detail -->
+                            <button class="btn crud-btn" style="background-color: #FCCD2A;">
+                                <i class="bi bi-eye-fill"></i>
+                            </button>
+
                         </td>
                     </tr>
                 </tbody>

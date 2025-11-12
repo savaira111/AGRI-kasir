@@ -25,20 +25,20 @@
             <!-- Bagian atas sidebar -->
             <div>
                 <div class="text-center mb-5">
-                    <img src="{{ asset('images/logo-kasir.png') }}" alt="Logo" 
-                         style="width: 70px; height: 70px; border-radius: 50%;">
-                    <h4 class="mt-2 fw-bold">AGRI</h4>
+                    <img src="{{ asset('image/logo-kasir.png') }}" alt="Logo" 
+                         style="width: 170px; height: 170px; border-radius: 50%;">
                 </div>
 
                 <!-- 🌼 Menu Fitur (diposisikan agak ke tengah) -->
                 <ul class="list-unstyled mt-5">
                     <li class="mb-3">
+
                         <a href="{{ route('kelola.produk') }}" 
                             class="d-block text-black text-decoration-none p-2 rounded"
                             style="background-color: transparent; transition: .3s;"
                             onmouseover="this.style.backgroundColor='#FCCD2A';"
                             onmouseout="this.style.backgroundColor='transparent';">
-                            <i class="bi bi-box-seam me-2"></i> Kelola Produk
+                            <i class="bi bi-box-seam me-2"></i> Produk
                         </a>
                         </li>
 
@@ -50,7 +50,7 @@
                            style="background-color: transparent; transition: .3s;"
                            onmouseover="this.style.backgroundColor='#FCCD2A';"
                            onmouseout="this.style.backgroundColor='transparent';">
-                           <i class="bi bi-people-fill me-2"></i> Kelola User
+                           <i class="bi bi-people-fill me-2"></i>User
                         </a>
                     </li>
                     <li class="mb-3">
@@ -90,12 +90,12 @@
         <div class="flex-grow-1 p-4">
            
             <div class="d-flex justify-content-between align-items-center p-4 rounded"
-                 style="background-color: #B9E4C9;">
+                 style="background-color: #C0EBA6;">
                 <div>
-                    <h4 class="fw-bold">Selamat Datang, <span style="color:#356b3f;">Owner</span></h4>
-                    <p style="margin: 0;">Senang melihatmu kembali di sistem AGRI 🌱</p>
+                    <h4 class="fw-bold"  style="font-size:30px;">Selamat Datang, <span style="color:#356b3f;">Owner</span></h4>
+                    <p style="margin: 0;">Senang melihatmu kembali di AGRI 🌱</p>
                 </div>
-                <img src="{{ asset('images/dashboard.png') }}" alt="Owner" style="width: 100px; height: 100px;">
+                <img src="{{ asset('image/dasboard.png') }}" alt="Owner" style="width: 200px; height: 200px;">
             </div>
 
             <div class="row mt-4 g-3">

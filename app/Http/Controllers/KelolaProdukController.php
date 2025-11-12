@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Produk; // pastiin kamu punya model Produk
+use App\Models\Produk;
 
 class KelolaProdukController extends Controller
 {
@@ -13,8 +13,8 @@ class KelolaProdukController extends Controller
         // Ambil semua data produk dari database
         $produk = Produk::all();
 
-        // Kirim ke tampilan
-        return view('kelola_produk', compact('produk'));
+        // Kirim ke tampilan (ganti underscore jadi titik)
+        return view('kelola.produk', compact('produk'));
     }
 
     // 🔹 Menyimpan produk baru
