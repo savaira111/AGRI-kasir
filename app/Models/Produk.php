@@ -10,16 +10,11 @@ class Produk extends Model
     use HasFactory;
 
     protected $table = 'produk';
+    protected $primaryKey = 'id_produk'; // 💡 kasih tahu primary key-nya
+    public $incrementing = false; // karena bukan auto increment
+    protected $keyType = 'string'; // tipe data kode_produk biasanya string
 
-    protected $fillable = [
-        'nama_produk',
-        'kategori',
-        'harga_jual',
-        'stok',
-        'foto_produk',
-        'deskripsi_produk',
-        'status_produk',
-        'tanggal_input',
+    protected $guarded = [
     ];
 
     protected $hidden = [
@@ -36,5 +31,16 @@ class Produk extends Model
     public function detailTransaksi()
     {
         return $this->hasMany(DetailTransaksi::class, 'id_produk');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($produk) {
+            if (!$produk->tanggal_input) {
+                $produk->tanggal_input = now();
+            }
+        });
     }
 }

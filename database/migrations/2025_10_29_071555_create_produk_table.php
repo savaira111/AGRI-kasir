@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id('id_produk'); // Primary Key
             $table->string('kode_produk')->nullable(); // Kode unik (opsional)
             $table->string('nama_produk'); // Nama barang
+            $table->string('nama_pemasok')->nullable();
             $table->integer('stok')->default(0); // Jumlah stok
             $table->decimal('harga_jual', 10, 2)->nullable(); // Harga jual
             $table->decimal('harga_beli', 10, 2)->nullable(); // Harga beli

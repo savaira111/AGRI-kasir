@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Produk - AGRI</title>
+    <title>Kelola Produk - AGRI</title>
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -12,8 +12,8 @@
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
-<body style="font-family: 'Rubik', sans-serif; background-color: #f4f7f4;">
 
+<body style="font-family: 'Rubik', sans-serif; background-color: #f4f7f4;">
 <div class="d-flex">
 
     <!-- 🌿 SIDEBAR -->
@@ -28,7 +28,7 @@
 
             <ul class="list-unstyled mt-5">
                 <li class="mb-3">
-                    <a href="#" class="d-block text-black text-decoration-none p-2 rounded fw-bold" 
+                    <a href="{{ route('produk.index') }}" class="d-block text-black text-decoration-none p-2 rounded fw-bold" 
                        style="background-color: #FCCD2A;">
                        <i class="bi bi-box-seam me-2"></i> Produk
                     </a>
@@ -70,83 +70,87 @@
     </div>
     <!-- 🌿 END SIDEBAR -->
 
-
     <!-- MAIN CONTENT -->
     <div class="flex-grow-1 p-4">
 
-       <div class="d-flex justify-content-center align-items-center mb-4">
-    <div class="input-group" style="width: 1000px;">
-        <!-- Icon Search -->
-        <span class="input-group-text" 
-            style="background-color: #C0EBA6; border: none; border-radius: 20px 0 0 20px;">
-            <i class="bi bi-search" style="color: #333;"></i>
-        </span>
+        <!-- 🔍 Search Bar -->
+        <div class="d-flex justify-content-center align-items-center mb-4">
+            <div class="input-group" style="width: 1000px;">
+                <span class="input-group-text" style="background-color: #C0EBA6; border: none; border-radius: 20px 0 0 20px;">
+                    <i class="bi bi-search" style="color: #333;"></i>
+                </span>
+                <input type="text" class="form-control" placeholder="Search..." 
+                       style="background-color: #C0EBA6; border: none; color: #333;">
+                <span class="input-group-text" style="background-color: #C0EBA6; border: none; border-radius: 0 20px 20px 0;">
+                    <img src="{{ asset('image/profile.png') }}" alt="Profile"
+                         style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid white;">
+                </span>
+            </div>
+        </div>
 
-        <!-- Input -->
-        <input type="text" class="form-control" placeholder="Search..."
-            style="background-color: #C0EBA6; border: none; color: #333;">
+        <!-- 🟡 Tombol Tambah -->
+        <div class="d-flex justify-content-end mb-3">
+            <a href="{{ route('produk.create') }}" 
+               class="btn btn-warning fw-bold d-flex align-items-center"
+               style="color: #000000; font-family: 'Rubik', sans-serif; border-radius: 12px;">
+                <i class="bi bi-plus-circle me-1"></i> Tambah
+            </a>
+        </div>
 
-        <!-- Profile di Dalam Search -->
-        <span class="input-group-text" 
-            style="background-color: #C0EBA6; border: none; border-radius: 0 20px 20px 0;">
-            <img src="{{ asset('image/profile.png') }}" alt="Profile"
-                style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid white;">
-        </span>
-    </div>
-</div>
-
-            
-            <div class="d-flex justify-content-end mb-3">
-        <button class="btn btn-warning fw-bold d-flex align-items-center"
-                style="color: #000000; font-family: 'Rubik', sans-serif; border-radius: 12px;">
-            <i class="bi bi-plus-circle me-1"></i> Tambah
-        </button>
-    </div>
-
-
-        <!-- Tabel Produk -->
+        <!-- 🧾 Tabel Produk -->
         <div class="mt-4 bg-light p-3 rounded shadow-sm">
             <table class="table table-bordered text-center align-middle" style="background-color: #C0EBA6;">
                 <thead>
-                    <tr style="background-color: #A0D683; color: #000;">
-                        <th>No</th>
-                        <th>Kode Produk</th>
-                        <th>Nama Produk</th>
-                        <th>Nama Pemasok</th>
-                        <th>Kategori</th>
-                        <th>Stok</th>
-                        <th>Aksi</th>
+                    <tr>
+                        <th style="background-color: #7FB176; color: #fafafa;">No</th>
+                        <th style="background-color: #7FB176; color: #fafafa;">Kode Produk</th>
+                        <th style="background-color: #7FB176; color: #fafafa;">Nama Produk</th>
+                        <th style="background-color: #7FB176; color: #fafafa;">Nama Pemasok</th>
+                        <th style="background-color: #7FB176; color: #fafafa;">Kategori</th>
+                        <th style="background-color: #7FB176; color: #fafafa;">Stok</th>
+                        <th style="background-color: #7FB176; color: #fafafa;">Aksi</th>
                     </tr>
                 </thead>
-                <tbody style="background-color: #D3F8C8;">
-                    <tr>
-                        <td>1</td>
-                        <td>43673098122874</td>
-                        <td>Pupuk Media Tanam</td>
-                        <td>Jamal</td>
-                        <td>Pupuk</td>
-                        <td>25</td>
-                        <td>
-                           <div class="d-flex justify-content-center align-items-center gap-3">
+                <tbody>
+                    @forelse ($produk as $index => $item)
+                        <tr>
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $item->kode_produk ?? '-' }}</td>
+                            <td>{{ $item->nama_produk }}</td>
+                            <td>{{ $item->nama_pemasok ?? '-' }}</td>
+                            <td>{{ $item->kategori ?? '-' }}</td>
+                            <td>{{ $item->stok }}</td>
+                            <td>{{ $item->deskripsi_produk}}</td>
+                           <!-- BAGIAN AJA YANG DIUBAH, BAGIAN LAIN BIARIN -->
+<td>
+    <div class="d-flex justify-content-center gap-2">
+        <!-- Tombol Edit -->
+        <a href="{{ route('produk.edit', $item->id_produk) }}" class="btn btn-sm" style="background-color: #FCCD2A;">
+            <i class="bi bi-pencil-fill"></i>
+        </a>
 
-                               
-                            <!-- Tombol Edit -->
-                            <button class="btn crud-btn" style="background-color: #FCCD2A;">
-                                <i class="bi bi-pencil-fill"></i>
-                            </button>
+        <!-- Tombol Hapus -->
+        <form action="{{ route('produk.destroy', $item->id_produk) }}" method="POST" 
+              onsubmit="return confirm('Yakin mau hapus produk ini? 🌿')">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-sm" style="background-color: #FCCD2A;">
+                <i class="bi bi-trash3-fill"></i>
+            </button>
+        </form>
 
-                            <!-- Tombol Hapus -->
-                            <button class="btn crud-btn" style="background-color: #FCCD2A;">
-                                <i class="bi bi-trash3-fill"></i>
-                            </button>
-
-                            <!-- Tombol Detail -->
-                            <button class="btn crud-btn" style="background-color: #FCCD2A;">
-                                <i class="bi bi-eye-fill"></i>
-                            </button>
-
-                        </td>
-                    </tr>
+        <!-- Tombol Detail -->
+        <button class="btn btn-sm" style="background-color: #FCCD2A;">
+            <i class="bi bi-eye-fill"></i>
+        </button>
+    </div>
+</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="text-muted">Belum ada data produk 🌱</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
@@ -155,13 +159,6 @@
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- JS sederhana -->
-<script>
-    document.querySelector('.btn-warning').addEventListener('click', () => {
-        alert('Fitur tambah produk belum diaktifkan 🌱');
-    });
-</script>
 
 </body>
 </html>
