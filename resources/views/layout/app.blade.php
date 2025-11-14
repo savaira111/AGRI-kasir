@@ -55,28 +55,24 @@
                         </a>
                     </li>
                     <li class="mb-3">
-                        <a href="#" class="d-block text-black text-decoration-none p-2 rounded"
-                           onmouseover="this.style.backgroundColor='#FCCD2A';"
-                           onmouseout="this.style.backgroundColor='transparent';">
-                           <i class="bi bi-people-fill me-2"></i> User
-                        </a>
-                    </li>
-                    <li class="mb-3">
-                        <a href="#" class="d-block text-black text-decoration-none p-2 rounded"
+                        <a href="{{ route('transactions.index') }}" 
+                            class="d-block text-black text-decoration-none p-2 rounded"
                            onmouseover="this.style.backgroundColor='#FCCD2A';"
                            onmouseout="this.style.backgroundColor='transparent';">
                            <i class="bi bi-cart-check-fill me-2"></i> Transaksi Penjualan
                         </a>
                     </li>
                     <li class="mb-3">
-                        <a href="#" class="d-block text-black text-decoration-none p-2 rounded"
+                        <a href="{{ route('dashboard.index') }}" 
+                            class="d-block text-black text-decoration-none p-2 rounded"
                            onmouseover="this.style.backgroundColor='#FCCD2A';"
                            onmouseout="this.style.backgroundColor='transparent';">
                            <i class="bi bi-speedometer2 me-2"></i> Dashboard
                         </a>
                     </li>
                     <li class="mb-3">
-                        <a href="#" class="d-block text-black text-decoration-none p-2 rounded"
+                        <a href="{{ route('laporan.index') }}" 
+                            class="d-block text-black text-decoration-none p-2 rounded"
                            onmouseover="this.style.backgroundColor='#FCCD2A';"
                            onmouseout="this.style.backgroundColor='transparent';">
                            <i class="bi bi-bar-chart-line-fill me-2"></i> Laporan Penjualan

@@ -33,7 +33,7 @@
                 <ul class="list-unstyled mt-5">
                     <li class="mb-3">
 
-                        <a href="{{ route('kelola.produk') }}" 
+                        <a href="{{ route('produk.index') }}" 
                             class="d-block text-black text-decoration-none p-2 rounded"
                             style="background-color: transparent; transition: .3s;"
                             onmouseover="this.style.backgroundColor='#FCCD2A';"
@@ -42,20 +42,10 @@
                         </a>
                         </li>
 
-
-                    
-
-                    <li class="mb-3">
-                        <a href="#" class="d-block text-black text-decoration-none p-2 rounded"
-                           style="background-color: transparent; transition: .3s;"
-                           onmouseover="this.style.backgroundColor='#FCCD2A';"
-                           onmouseout="this.style.backgroundColor='transparent';">
-                           <i class="bi bi-people-fill me-2"></i>User
-                        </a>
                     </li>
                     <li class="mb-3">
-                        <a href="#" class="d-block text-black text-decoration-none p-2 rounded"
-                           style="background-color: transparent; transition: .3s;"
+                        <a href="{{ route('transactions.index') }}" 
+                            class="d-block text-black text-decoration-none p-2 rounded"
                            onmouseover="this.style.backgroundColor='#FCCD2A';"
                            onmouseout="this.style.backgroundColor='transparent';">
                            <i class="bi bi-cart-check-fill me-2"></i> Transaksi Penjualan
@@ -89,14 +79,23 @@
         <!-- Main Content -->
         <div class="flex-grow-1 p-4">
            
-            <div class="d-flex justify-content-between align-items-center p-4 rounded"
-                 style="background-color: #C0EBA6;">
-                <div>
-                    <h4 class="fw-bold"  style="font-size:30px;">Selamat Datang, <span style="color:#356b3f;">Owner</span></h4>
-                    <p style="margin: 0;">Senang melihatmu kembali di AGRI 🌱</p>
-                </div>
-                <img src="{{ asset('image/dasboard.png') }}" alt="Owner" style="width: 200px; height: 200px;">
-            </div>
+            <<div class="d-flex justify-content-between align-items-center p-4 rounded position-relative"
+     style="background-color: #C0EBA6;">
+    <div>
+        <h4 class="fw-bold"  style="font-size:30px;">Selamat Datang, <span style="color:#356b3f;">Owner</span></h4>
+        <p style="margin: 0;">Senang melihatmu kembali di AGRI 🌱</p>
+    </div>
+
+    <div class="position-relative">
+        <!-- Dashboard image -->
+        <img src="{{ asset('image/dasboard.png') }}" alt="Dashboard" style="width: 200px; height: 200px;">
+
+        <!-- Profile kecil di atas dashboard -->
+        <img src="{{ asset('image/profile.png') }}" alt="Owner" 
+             style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid white; 
+                    position: absolute; top: -10px; right: -10px;">
+    </div>
+</div>
 
             <div class="row mt-4 g-3">
                 <div class="col-md-4">
