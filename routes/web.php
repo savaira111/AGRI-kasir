@@ -5,11 +5,17 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\TransactionController;
 
-
+// Dashboard
 Route::get('/', function () {
-    return view('dashboard');
+    return redirect()->route('dashboard');
 });
 
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->name('dashboard');
+
+
+// Produk
 Route::prefix('produk')->group(function () {
     Route::get('/', [ProdukController::class, 'index'])->name('produk.index');
     Route::get('/tambah', [ProdukController::class, 'create'])->name('produk.create');
@@ -19,8 +25,9 @@ Route::prefix('produk')->group(function () {
     Route::delete('/hapus/{id}', [ProdukController::class, 'destroy'])->name('produk.destroy');
     Route::get('/{id}', [ProdukController::class, 'show'])->name('produk.show');
 });
- 
 
+
+// Transactions
 Route::prefix('transactions')->group(function () {
     Route::get('/', [TransactionController::class, 'index'])->name('transactions.index');
     Route::get('/create', [TransactionController::class, 'create'])->name('transactions.create');

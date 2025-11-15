@@ -5,18 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Pembayaran extends Model
+class CetakStruk extends Model
 {
     use HasFactory;
 
-    protected $table = 'pembayaran';
-    protected $primaryKey = 'id_pembayaran';
+    protected $table = 'cetak_struk';
+    protected $primaryKey = 'id_struk';
 
     protected $fillable = [
         'id_transaksi',
-        'jumlah_bayar',
-        'kembalian',
-        'tanggal_bayar'
+        'file_path'
     ];
 
     public function transaksi()

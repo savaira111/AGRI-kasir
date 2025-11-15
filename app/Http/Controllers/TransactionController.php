@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\TransaksiPenjualan;
+use App\Models\Transaction;
+use App\Models\DetailTransaksi;
+use App\Models\Pembayaran;
+use App\Models\CetakStruk;
+
 
 class TransactionController extends Controller
 {
@@ -11,7 +15,7 @@ class TransactionController extends Controller
     public function index()
     {
         // Ambil semua transaksi sekaligus relasi user, detail, pembayaran, dan struk
-        $transactions = TransaksiPenjualan::with(['user', 'detailTransaksi', 'pembayaran', 'struk'])
+        $transactions = Transaction::with(['user', 'detailTransaksi', 'pembayaran', 'struk'])
                             ->orderBy('tanggal_transaksi', 'desc')
                             ->get();
 
@@ -28,7 +32,7 @@ class TransactionController extends Controller
     public function store(Request $request)
     {
         // validasi bisa ditambah nanti
-        $transaction = TransaksiPenjualan::create([
+        $transaction = Transaction::create([
             'id_user' => $request->id_user,
             'tanggal_transaksi' => $request->tanggal_transaksi,
             'total_harga' => $request->total_harga,
@@ -42,7 +46,7 @@ class TransactionController extends Controller
     // Detail transaksi
     public function show($id)
     {
-        $transaction = TransaksiPenjualan::with(['user', 'detailTransaksi', 'pembayaran', 'struk'])
+        $transaction = Transaction::with(['user', 'detailTransaksi', 'pembayaran', 'struk'])
                             ->findOrFail($id);
 
         return view('transactions.show', compact('transaction'));
@@ -51,7 +55,7 @@ class TransactionController extends Controller
     // Hapus transaksi
     public function destroy($id)
     {
-        $transaction = TransaksiPenjualan::findOrFail($id);
+        $transaction = Transaction::findOrFail($id);
         $transaction->delete();
 
         return redirect()->route('transactions.index')->with('success', 'Transaction deleted successfully!');

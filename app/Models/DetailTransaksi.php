@@ -9,10 +9,9 @@ class DetailTransaksi extends Model
 {
     use HasFactory;
 
-    // nama tabel di database
     protected $table = 'detail_transaksi';
+    protected $primaryKey = 'id_detail';
 
-    // kolom yang bisa diisi
     protected $fillable = [
         'id_transaksi',
         'id_produk',
@@ -20,17 +19,15 @@ class DetailTransaksi extends Model
         'subtotal',
     ];
 
-    // relasi ke tabel transaksi
+    // relasi ke transaksi utama
     public function transaksi()
     {
-        // satu detail transaksi itu punya satu transaksi utama
-        return $this->belongsTo(Transaksi::class, 'id_transaksi');
+        return $this->belongsTo(Transaction::class, 'id_transaksi');
     }
 
-    // relasi ke tabel produk
+    // relasi ke produk
     public function produk()
     {
-        // satu detail transaksi itu ngarah ke satu produk
         return $this->belongsTo(Produk::class, 'id_produk');
     }
 }

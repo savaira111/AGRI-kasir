@@ -8,43 +8,70 @@ use Illuminate\Support\Facades\Storage;
 
 class ProdukController extends Controller
 {
-    // 🌿 Tampilkan semua produk
-    public function index()
+    // 🌿 Tampilkan semua produk + search
+    public function index(Request $request)
     {
-        $produk = Produk::all();
+        $search = $request->input('search');
+
+        $produk = Produk::query();
+
+        if ($search) {
+            $produk->where('nama_produk', 'like', "%{$search}%")
+                   ->orWhere('deskripsi_produk', 'like', "%{$search}%");
+        }
+
+        $produk = $produk->get();
+
         return view('kelola.produk', compact('produk'));
     }
 
     // 🌿 Form tambah produk
     public function create()
     {
-        return view('kelola.tambah-produk');
+        return view('kelola.tambah_produk');
     }
 
     // 🌿 Simpan produk baru
     public function store(Request $request)
     {
-        
-        $validated = $request->validate([
-            'kode_produk' => 'required|unique:produk,kode_produk',
+        $request->validate([
+            'kode_produk' => 'nullable|string|max:100',
             'nama_produk' => 'required|string|max:255',
-            'nama_pemasok' => 'required|string|max:255',
-            'kategori' => 'required|string|max:255',
-            'stok' => 'required|numeric|min:0',
-            'satuan' => 'required' ,
-            'harga_jual' => 'required' ,
-            'harga_beli' => 'required' ,
-            'deskripsi_produk' => 'required' ,
-            'tanggal_input' => 'required' ,
-            'tanggal_kadaluarsa' => 'required' ,
+            'nama_pemasok' => 'nullable|string|max:255',
+            'stok' => 'required|integer|min:0',
+            'harga_jual' => 'nullable|numeric|min:0',
+            'harga_beli' => 'nullable|numeric|min:0',
+            'kategori' => 'nullable|string|max:100',
+            'satuan' => 'nullable|string|max:50',
             'foto_produk' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'deskripsi_produk' => 'nullable|string',
+            'status_produk' => 'nullable|in:aktif,nonaktif',
+            'tanggal_input' => 'nullable|date',
+            'tanggal_kadaluarsa' => 'nullable|date|after_or_equal:tanggal_input',
         ]);
 
+        $produk = new Produk();
+        $produk->kode_produk = $request->kode_produk;
+        $produk->nama_produk = $request->nama_produk;
+        $produk->nama_pemasok = $request->nama_pemasok;
+        $produk->stok = $request->stok;
+        $produk->harga_jual = $request->harga_jual;
+        $produk->harga_beli = $request->harga_beli;
+        $produk->kategori = $request->kategori;
+        $produk->satuan = $request->satuan;
+        $produk->deskripsi_produk = $request->deskripsi_produk;
+        $produk->status_produk = $request->status_produk ?? 'aktif';
+        $produk->tanggal_input = $request->tanggal_input;
+        $produk->tanggal_kadaluarsa = $request->tanggal_kadaluarsa;
+
         if ($request->hasFile('foto_produk')) {
-            $validated['foto_produk'] = $request->file('foto_produk')->store('produk', 'public');
+            $file = $request->file('foto_produk');
+            $filename = time().'_'.$file->getClientOriginalName();
+            $file->storeAs('produk', $filename, 'public');
+            $produk->foto_produk = 'produk/' . $filename;
         }
 
-        Produk::create($validated);
+        $produk->save();
 
         return redirect()->route('produk.index')->with('success', 'Produk berhasil ditambahkan!');
     }
@@ -53,39 +80,57 @@ class ProdukController extends Controller
     public function edit($id)
     {
         $produk = Produk::findOrFail($id);
-        return view('kelola.edit-produk', compact('produk'));
+        return view('kelola.edit_produk', compact('produk'));
     }
 
-    // 🌿 Update data produk
+    // 🌿 Update produk
     public function update(Request $request, $id)
     {
-        // dd($request);
-        $produk = Produk::findOrFail($id);
-
-        $validated = $request->validate([
-            'kode_produk' => 'nullable|unique:produk,kode_produk,' . $produk->id,
-            'nama_produk' => 'nullable|string|max:255',
+        $request->validate([
+            'kode_produk' => 'nullable|string|max:100',
+            'nama_produk' => 'required|string|max:255',
             'nama_pemasok' => 'nullable|string|max:255',
-            'kategori_produk' => 'nullable|string|max:255',
-            'stok' => 'nullable|numeric|min:0',
-            'satuan' => 'nullable' ,
-            'harga_jual' => 'nullable' ,
-            'harga_beli' => 'nullable' ,
-            'deskripsi_produk' => 'nullable' ,
-            'tanggal_input' => 'nullable' ,
-            'tanggal_kadaluarsa' => 'nullable' ,
+            'stok' => 'required|integer|min:0',
+            'harga_jual' => 'nullable|numeric|min:0',
+            'harga_beli' => 'nullable|numeric|min:0',
+            'kategori' => 'nullable|string|max:100',
+            'satuan' => 'nullable|string|max:50',
             'foto_produk' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'deskripsi_produk' => 'nullable|string',
+            'status_produk' => 'nullable|in:aktif,nonaktif',
+            'tanggal_input' => 'nullable|date',
+            'tanggal_kadaluarsa' => 'nullable|date|after_or_equal:tanggal_input',
         ]);
 
-        // 🌸 Jika ada file baru, hapus foto lama dan simpan yang baru
+        $produk = Produk::findOrFail($id);
+
+        $produk->kode_produk = $request->kode_produk;
+        $produk->nama_produk = $request->nama_produk;
+        $produk->nama_pemasok = $request->nama_pemasok;
+        $produk->stok = $request->stok;
+        $produk->harga_jual = $request->harga_jual;
+        $produk->harga_beli = $request->harga_beli;
+        $produk->kategori = $request->kategori;
+        $produk->satuan = $request->satuan;
+        $produk->deskripsi_produk = $request->deskripsi_produk;
+        $produk->status_produk = $request->status_produk ?? 'aktif';
+        $produk->tanggal_input = $request->tanggal_input;
+        $produk->tanggal_kadaluarsa = $request->tanggal_kadaluarsa;
+
         if ($request->hasFile('foto_produk')) {
-            if ($produk->foto_produk) {
+
+            // hapus file lama
+            if ($produk->foto_produk && Storage::disk('public')->exists($produk->foto_produk)) {
                 Storage::disk('public')->delete($produk->foto_produk);
             }
-            $validated['foto_produk'] = $request->file('foto_produk')->store('produk', 'public');
+
+            $file = $request->file('foto_produk');
+            $filename = time().'_'.$file->getClientOriginalName();
+            $file->storeAs('produk', $filename, 'public');
+            $produk->foto_produk = 'produk/' . $filename;
         }
 
-        $produk->update($validated);
+        $produk->save();
 
         return redirect()->route('produk.index')->with('success', 'Produk berhasil diperbarui!');
     }
@@ -95,7 +140,7 @@ class ProdukController extends Controller
     {
         $produk = Produk::findOrFail($id);
 
-        if ($produk->foto_produk) {
+        if ($produk->foto_produk && Storage::disk('public')->exists($produk->foto_produk)) {
             Storage::disk('public')->delete($produk->foto_produk);
         }
 
@@ -104,10 +149,10 @@ class ProdukController extends Controller
         return redirect()->route('produk.index')->with('success', 'Produk berhasil dihapus!');
     }
 
-
-public function show($id)
-{
-    $produk = Produk::findOrFail($id);
-    return view('kelola.detail-produk', compact('produk'));
-}
+    // 🌿 Detail produk
+    public function show($id)
+    {
+        $produk = Produk::findOrFail($id);
+        return view('kelola.detail_produk', compact('produk'));
+    }
 }

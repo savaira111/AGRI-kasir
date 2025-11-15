@@ -10,17 +10,16 @@ return new class extends Migration
     {
         Schema::create('pembayaran', function (Blueprint $table) {
             $table->id('id_pembayaran');
-            $table->foreignId('id_transaksi')->constrained('transaksi_penjualan')->onDelete('cascade');
+
+            // foreign key ke transaksi_penjualan.id
+            $table->foreignId('id_transaksi')
+                  ->constrained('transaksi_penjualan')
+                  ->onDelete('cascade');
+
             $table->string('metode_pembayaran');
             $table->integer('jumlah_bayar');
             $table->integer('kembalian')->default(0);
             $table->timestamp('tanggal_pembayaran')->useCurrent();
-
-            // relasi ke transaksi_penjualan
-            $table->foreign('id_transaksi')
-                  ->references('id_transaksi')
-                  ->on('transaksi_penjualan')
-                  ->onDelete('cascade');
         });
     }
 

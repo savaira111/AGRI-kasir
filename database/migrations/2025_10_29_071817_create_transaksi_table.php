@@ -8,24 +8,27 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('transaksi_penjualan', function (Blueprint $table) {
-            $table->id('id_transaksi'); // Primary key
-            $table->unsignedBigInteger('id_user'); // FK manual biar bisa refer ke id_user
-            $table->date('tanggal_transaksi'); // Tanggal transaksi
-            $table->string('metode_pembayaran', 50); // Tunai / Transfer / dll
-            $table->decimal('total_harga', 12, 2); // Total harga
-            $table->timestamps();
+        Schema::create('pembayaran', function (Blueprint $table) {
+            $table->bigIncrements('id_pembayaran');
 
-            //  Relasi ke tabel users
-            $table->foreign('id_user')
-                  ->references('id_user') //  harus sama kayak kolom di tabel users
-                  ->on('users')
+            // FK BENAR
+            $table->unsignedBigInteger('id_transaksi');
+
+            $table->string('metode_pembayaran');
+            $table->integer('jumlah_bayar');
+            $table->integer('kembalian')->default(0);
+            $table->timestamp('tanggal_pembayaran')->useCurrent();
+
+            // FOREIGN KEY FIX
+            $table->foreign('id_transaksi')
+                  ->references('id_transaksi')         // kolom tujuan
+                  ->on('transaksi_penjualan')          // tabel tujuan
                   ->onDelete('cascade');
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('transaksi_penjualan');
+        Schema::dropIfExists('pembayaran');
     }
 };

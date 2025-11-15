@@ -1,87 +1,37 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Models;
 
-use Illuminate\Http\Request;
-use App\Models\TransaksiPenjualan;
-use App\Models\DetailTransaksi;
-use App\Models\Produk;
+use Illuminate\Database\Eloquent\Model;
 
-class TransactionController extends Controller
+class Transaction extends Model
 {
-    // Display all sales transactions
-    public function index()
-    {
-        $transactions = TransaksiPenjualan::with(['user', 'detailTransaksi.produk'])
-            ->orderBy('tanggal_transaksi', 'desc')
-            ->get();
+    protected $table = 'transaksi_penjualan';
+    protected $primaryKey = 'id_transaksi';
 
-        return view('transactions.index', compact('transactions'));
+    protected $fillable = [
+        'id_user',
+        'tanggal_transaksi',
+        'total_harga',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user', 'id');
     }
 
-    // Show form to create a new transaction
-    public function create()
+    public function detailTransaksi()
     {
-        $products = Produk::all();
-        return view('transactions.create', compact('products'));
+        return $this->hasMany(DetailTransaksi::class, 'transaksi_id', 'id_transaksi');
     }
 
-    // Store new transaction
-    public function store(Request $request)
+    public function pembayaran()
     {
-        $request->validate([
-            'id_user' => 'required|exists:users,id',
-            'tanggal_transaksi' => 'required|date',
-            'status' => 'required|string',
-            'metode_pembayaran' => 'required|string',
-            'produk_id' => 'required|array',
-            'produk_id.*' => 'exists:produk,id_produk',
-            'quantity.*' => 'required|integer|min:1'
-        ]);
-
-        $transaction = TransaksiPenjualan::create([
-            'id_user' => $request->id_user,
-            'tanggal_transaksi' => $request->tanggal_transaksi,
-            'status' => $request->status,
-            'metode_pembayaran' => $request->metode_pembayaran,
-            'total_harga' => 0, // temporary, will calculate below
-        ]);
-
-        $total = 0;
-        foreach ($request->produk_id as $index => $produkId) {
-            $product = Produk::find($produkId);
-            $quantity = $request->quantity[$index];
-            $subtotal = $product->harga * $quantity;
-            $total += $subtotal;
-
-            DetailTransaksi::create([
-                'id_transaksi' => $transaction->id_transaksi,
-                'id_produk' => $produkId,
-                'quantity' => $quantity,
-                'subtotal' => $subtotal,
-            ]);
-        }
-
-        $transaction->update(['total_harga' => $total]);
-
-        return redirect()->route('transactions.index')->with('success', 'Transaction created successfully!');
+        return $this->hasOne(Pembayaran::class, 'transaksi_id', 'id_transaksi');
     }
 
-    // Show a single transaction
-    public function show($id)
+    public function struk()
     {
-        $transaction = TransaksiPenjualan::with(['user', 'detailTransaksi.produk', 'pembayaran'])
-            ->findOrFail($id);
-
-        return view('transactions.show', compact('transaction'));
-    }
-
-    // Delete transaction
-    public function destroy($id)
-    {
-        $transaction = TransaksiPenjualan::findOrFail($id);
-        $transaction->delete();
-
-        return redirect()->route('transactions.index')->with('success', 'Transaction deleted successfully!');
+        return $this->hasOne(Struk::class, 'transaksi_id', 'id_transaksi');
     }
 }
