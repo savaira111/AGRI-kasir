@@ -30,7 +30,7 @@
                 <tbody>
                     @forelse($transactions as $t)
                     <tr>
-                        <td class="text-center">{{ $t->id_transaksi }}</td>
+                        <td class="text-center">{{ $t->id }}</td>
                         <td class="text-center">{{ $t->tanggal_transaksi }}</td>
                         <td class="text-center">Rp {{ number_format($t->total_harga, 0, ',', '.') }}</td>
                         <td class="text-center">{{ ucfirst($t->metode_pembayaran) }}</td>
@@ -39,7 +39,7 @@
                         <td class="text-center">
 
                             <!-- Button Detail -->
-                            <a href="{{ route('transactions.show', $t->id_transaksi) }}" 
+                            <a href="{{ route('transactions.show', $t->id) }}" 
                                class="btn btn-sm btn-info text-white">
                                 Detail
                             </a>

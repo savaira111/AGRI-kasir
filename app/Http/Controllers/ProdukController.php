@@ -28,7 +28,7 @@ class ProdukController extends Controller
     // 🌿 Form tambah produk
     public function create()
     {
-        return view('kelola.tambah_produk');
+        return view('kelola.tambah-produk');
     }
 
     // 🌿 Simpan produk baru
@@ -49,6 +49,15 @@ class ProdukController extends Controller
             'tanggal_input' => 'nullable|date',
             'tanggal_kadaluarsa' => 'nullable|date|after_or_equal:tanggal_input',
         ]);
+
+        // Jika ada file, simpan ke storage/app/public/produk dan simpan nama file ke DB
+            $namaFile = null;
+            if ($request->hasFile('foto_produk')) {
+                $file = $request->file('foto_produk');
+                $namaFile = time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
+                // simpan di storage/app/public/produk
+                $file->storeAs('public/produk', $namaFile);
+            }
 
         $produk = new Produk();
         $produk->kode_produk = $request->kode_produk;
@@ -80,7 +89,7 @@ class ProdukController extends Controller
     public function edit($id)
     {
         $produk = Produk::findOrFail($id);
-        return view('kelola.edit_produk', compact('produk'));
+        return view('kelola.edit-produk', compact('produk'));
     }
 
     // 🌿 Update produk
@@ -101,6 +110,23 @@ class ProdukController extends Controller
             'tanggal_input' => 'nullable|date',
             'tanggal_kadaluarsa' => 'nullable|date|after_or_equal:tanggal_input',
         ]);
+
+
+        // Jika upload foto baru
+        if ($request->hasFile('foto_produk')) {
+
+        // Hapus foto lama jika ada
+        if ($produk->foto_produk && file_exists(storage_path('app/public/produk/' . $produk->foto_produk))) {
+            unlink(storage_path('app/public/produk/' . $produk->foto_produk));
+        }
+
+        // Simpan foto baru
+        $file = $request->file('foto_produk');
+        $namaFile = time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
+        $file->storeAs('public/produk', $namaFile);
+
+        $produk->foto_produk = $namaFile;
+    }
 
         $produk = Produk::findOrFail($id);
 
@@ -155,4 +181,6 @@ class ProdukController extends Controller
         $produk = Produk::findOrFail($id);
         return view('kelola.detail_produk', compact('produk'));
     }
+
+    
 }

@@ -6,32 +6,33 @@ use Illuminate\Database\Eloquent\Model;
 
 class Transaction extends Model
 {
-    protected $table = 'transaksi_penjualan';
-    protected $primaryKey = 'id_transaksi';
+    protected $table = 'transactions'; // sesuai migration
+    protected $primaryKey = 'id'; // OK
 
-    protected $fillable = [
-        'id_user',
-        'tanggal_transaksi',
-        'total_harga',
-    ];
+    protected $guarded = [];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'id_user', 'id');
-    }
+    // Relasi ke users
+    public function users()
+{
+    return $this->belongsTo(User::class, 'id_user', 'id');
+}
 
+
+    // Relasi ke detail transaksi
     public function detailTransaksi()
     {
-        return $this->hasMany(DetailTransaksi::class, 'transaksi_id', 'id_transaksi');
+        return $this->hasMany(DetailTransaksi::class, 'transaksi_id');
     }
 
+    // Relasi ke pembayaran
     public function pembayaran()
     {
-        return $this->hasOne(Pembayaran::class, 'transaksi_id', 'id_transaksi');
+        return $this->hasOne(Pembayaran::class, 'transaksi_id');
     }
 
+    // Relasi ke struk
     public function struk()
     {
-        return $this->hasOne(Struk::class, 'transaksi_id', 'id_transaksi');
+        return $this->hasOne(Struk::class, 'transaksi_id');
     }
 }

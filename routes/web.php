@@ -34,5 +34,6 @@ Route::prefix('transactions')->group(function () {
     Route::post('/', [TransactionController::class, 'store'])->name('transactions.store');
     Route::get('/{id}', [TransactionController::class, 'show'])->name('transactions.show');
     Route::delete('/{id}', [TransactionController::class, 'destroy'])->name('transactions.destroy');
+    
 });
 

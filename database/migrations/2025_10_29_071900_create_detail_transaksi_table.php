@@ -18,8 +18,8 @@ return new class extends Migration
 
             //  Foreign key harus didefinisikan setelah kolomnya ada
             $table->foreign('id_transaksi')
-            ->references('id_transaksi')
-            ->on('transaksi_penjualan')
+            ->references('id')
+            ->on('transaksi')
             ->onDelete('cascade');
 
             $table->foreign('id_produk')

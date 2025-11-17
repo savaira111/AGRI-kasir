@@ -16,11 +16,11 @@ return new class extends Migration
             $table->string('kode_produk')->nullable(); // Kode unik (opsional)
             $table->string('nama_produk'); // Nama barang
             $table->string('nama_pemasok')->nullable();
-            $table->integer('stok')->default(0); // Jumlah stok
+            $table->integer('stok_produk')->default(0); // Jumlah stok
             $table->decimal('harga_jual', 10, 2)->nullable(); // Harga jual
             $table->decimal('harga_beli', 10, 2)->nullable(); // Harga beli
-            $table->string('kategori')->nullable(); // Contoh: Pupuk, Obat, Alat Pertanian
-            $table->string('satuan')->nullable(); // kg, liter, pcs
+            $table->string('kategori_produk')->nullable(); // Contoh: Pupuk, Obat, Alat Pertanian
+            $table->string('satuan_produk')->nullable(); // kg, liter, pcs
             $table->string('foto_produk')->nullable(); // Nama file gambar
             $table->text('deskripsi_produk')->nullable(); // Deskripsi tambahan
             $table->string('status_produk')->default('aktif'); // aktif / nonaktif

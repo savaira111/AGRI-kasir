@@ -13,13 +13,14 @@ return new class extends Migration
             $table->string('periode'); // contoh: "Oktober 2025"
             $table->decimal('total_penjualan', 10, 2); // total uang masuk selama periode
             $table->integer('total_transaksi'); // jumlah transaksi selama periode
-            $table->unsignedBigInteger('dibuat_oleh')->nullable(); // id user (admin/kasir)
+             $table->decimal('total_laba',10,2); // jumlah laba selama periode
+            $table->unsignedBigInteger('dibuat_oleh')->nullable(); // id user (admin)
             $table->timestamps();
 
             // relasi ke tabel user
             $table->foreign('dibuat_oleh')
-                  ->references('id_user')
-                  ->on('user')
+                  ->references('id')
+                  ->on('users')
                   ->onDelete('set null');
         });
     }

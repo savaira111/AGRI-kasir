@@ -8,27 +8,28 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('pembayaran', function (Blueprint $table) {
-            $table->bigIncrements('id_pembayaran');
+        Schema::create('transaksi', function (Blueprint $table) {
+            $table->bigIncrements('id');
 
-            // FK BENAR
-            $table->unsignedBigInteger('id_transaksi');
+            // FK ke users
+            $table->unsignedBigInteger('id_user');
 
-            $table->string('metode_pembayaran');
-            $table->integer('jumlah_bayar');
-            $table->integer('kembalian')->default(0);
-            $table->timestamp('tanggal_pembayaran')->useCurrent();
+            $table->date('tanggal_transaksi');
+            $table->decimal('total_harga', 15, 2);
+            $table->string('status_transaksi')->nullable();
+            $table->string('metode_pembayaran')->nullable();
+            $table->timestamps();
 
-            // FOREIGN KEY FIX
-            $table->foreign('id_transaksi')
-                  ->references('id_transaksi')         // kolom tujuan
-                  ->on('transaksi_penjualan')          // tabel tujuan
-                  ->onDelete('cascade');
+            // FOREIGN KEY
+            $table->foreign('id_user')
+                  ->references('id')
+                  ->on('users')
+                  ->cascadeOnDelete();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('pembayaran');
+        Schema::dropIfExists('transaksi');
     }
 };

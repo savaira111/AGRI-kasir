@@ -28,36 +28,47 @@
             object-fit: cover;
             border-radius: 8px;
         }
-        .btn-back {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
+        
     </style>
 </head>
 <body>
-<div class="container my-5">
+
+<div class="container my-5 position-relative">
+
+    <!-- SATU-SATUNYA tombol kembali -->
+    <a href="{{ route('produk.index') }}" 
+        class="position-absolute top-0 start-0 m-3 d-flex justify-content-center align-items-center"
+        style="
+            width: 40px;
+            height: 40px;
+            background-color: #FCCD2A;
+            border-radius: 50%;
+            text-decoration: none;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+            color: black;
+        ">
+        <i class="bi bi-arrow-left" style="font-size: 24px;"></i>
+    </a>
+
     <div class="row justify-content-center align-items-center">
-        <!-- Gambar Produk -->
+
+        <!-- Foto produk -->
         <div class="col-md-6 d-flex justify-content-center mb-4 mb-md-0">
-            @if($produk->foto_produk && file_exists(storage_path('app/public/' . $produk->foto_produk)))
-                <img src="{{ asset('storage/'.$produk->foto_produk) }}" alt="{{ $produk->nama_produk }}" class="product-img shadow">
+            @if($produk->foto_produk)
+                <img src="{{ asset('storage/produk/'.$produk->foto_produk) }}"
+                    alt="{{ $produk->nama_produk }}"
+                    class="product-img shadow">
             @else
-                <img src="{{ asset('image/default.png') }}" alt="Default Image" class="product-img shadow">
+                <img src="{{ asset('image/default.png') }}" 
+                    alt="Default Image" 
+                    class="product-img shadow">
             @endif
         </div>
 
         <!-- Card Detail -->
         <div class="col-md-6">
             <div class="card p-4 shadow">
-                <!-- Tombol Back (hanya icon) -->
-                <a href="{{ route('produk.index') }}" 
-                class="btn btn-light position-absolute top-0 start-0 m-3 p-2 rounded-circle shadow">
-                    <i class="bi bi-arrow-left"></i>
-                </a>
 
-
-                <!-- Detail Produk -->
                 <div class="mb-2"><strong>Kode Produk:</strong> {{ $produk->kode_produk }}</div>
                 <div class="mb-2"><strong>Nama Produk:</strong> {{ $produk->nama_produk }}</div>
                 <div class="mb-2"><strong>Nama Pemasok:</strong> {{ $produk->nama_pemasok->nama ?? '-' }}</div>
@@ -70,10 +81,10 @@
                 <div class="mb-2"><strong>Tanggal Input:</strong> {{ $produk->tanggal_input }}</div>
                 <div class="mb-2"><strong>Tanggal Kadaluarsa:</strong> {{ $produk->tanggal_kadaluarsa }}</div>
 
-                <!-- Tombol Edit -->
-                <a href="{{ route('produk.edit', $produk->id_produk) }}" class="btn btn-warning mt-3 w-100">Edit Produk</a>
+
             </div>
         </div>
+
     </div>
 </div>
 
