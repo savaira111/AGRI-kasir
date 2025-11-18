@@ -32,6 +32,7 @@ Route::prefix('transactions')->group(function () {
     Route::get('/', [TransactionController::class, 'index'])->name('transactions.index');
     Route::get('/create', [TransactionController::class, 'create'])->name('transactions.create');
     Route::post('/', [TransactionController::class, 'store'])->name('transactions.store');
+    Route::get('/search-product', [ProdukController::class, 'search'])->name('product.search'); 
     Route::get('/{id}', [TransactionController::class, 'show'])->name('transactions.show');
     Route::delete('/{id}', [TransactionController::class, 'destroy'])->name('transactions.destroy');
     

@@ -1,4 +1,3 @@
-<!-- resources/views/layouts/app.blade.php -->
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -6,13 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Kasir AGRI')</title>
 
-    <!-- Google Fonts: Rubik -->
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
-
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
     <style>
@@ -24,15 +18,18 @@
 
         /* Sidebar */
         .sidebar {
-            width: 250px;
-            min-width: 70px;
+            position: fixed;
+            top: 0;
+            left: 0;
             height: 100vh;
+            width: 250px;
             background-color: #C0EBA6;
             padding: 20px;
             display: flex;
             flex-direction: column;
             transition: width 0.3s;
             overflow: hidden;
+            flex-shrink: 0;
         }
 
         .sidebar.collapsed {
@@ -89,7 +86,9 @@
         /* Konten utama */
         .main-content {
             flex-grow: 1;
+            margin-left: 250px;
             padding: 20px 30px;
+            min-width: 0; /* penting supaya konten nggak dorong sidebar */
         }
 
         /* Hamburger */
@@ -110,53 +109,31 @@
     </style>
 </head>
 <body>
-    <div class="d-flex">
+    <div class="d-flex align-items-stretch">
         <!-- Sidebar -->
-        <div class="sidebar" id="sidebar">
-            <img src="{{ asset('image/logo-kasir.png') }}" alt="Logo" class="logo">
-
-            <ul>
-                <li>
-                    <a href="{{ route('produk.index') }}" class="{{ request()->routeIs('produk.index') ? 'active' : '' }}">
-                        <i class="bi bi-box-seam"></i> <span>Produk</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('transactions.index') }}" class="{{ request()->routeIs('transactions.index') ? 'active' : '' }}">
-                        <i class="bi bi-cart-check-fill"></i> <span>Transaksi</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
-                        <i class="bi bi-speedometer2"></i> <span>Dashboard</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <i class="bi bi-bar-chart-line-fill"></i> <span>Laporan</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
+        @include('layout.sidebar')
 
         <!-- Konten utama -->
         <div class="main-content">
-            <!-- Hamburger toggle -->
             <i class="bi bi-list hamburger" id="hamburgerBtn"></i>
             @yield('content')
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
     <script>
         const sidebar = document.getElementById('sidebar');
         const hamburgerBtn = document.getElementById('hamburgerBtn');
 
         hamburgerBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('collapsed');
-        });
+        sidebar.classList.toggle('collapsed');
+
+    if (sidebar.classList.contains('collapsed')) {
+        document.querySelector('.main-content').style.marginLeft = '70px';
+    } else {
+        document.querySelector('.main-content').style.marginLeft = '250px';
+        }
+    });
     </script>
 </body>
 </html>

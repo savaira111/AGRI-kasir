@@ -15,13 +15,10 @@ return new class extends Migration
             $table->integer('jumlah');
             $table->decimal('subtotal', 10, 2);
             $table->timestamps();
-
-            //  Foreign key harus didefinisikan setelah kolomnya ada
             $table->foreign('id_transaksi')
             ->references('id')
             ->on('transaksi')
             ->onDelete('cascade');
-
             $table->foreign('id_produk')
                   ->references('id_produk')
                   ->on('produk')

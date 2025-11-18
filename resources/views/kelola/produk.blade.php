@@ -53,8 +53,8 @@
                     <td>{{ $item->kode_produk ?? '-' }}</td>
                     <td>{{ $item->nama_produk }}</td>
                     <td>{{ $item->nama_pemasok ?? '-' }}</td>
-                    <td>{{ $item->kategori ?? '-' }}</td>
-                    <td>{{ $item->stok }}</td>
+                    <td>{{ $item->kategori_produk ?? '-' }}</td>
+                    <td>{{ $item->stok_produk }}</td>
 
                     <td class="text-center align-middle" style="white-space: nowrap;">
                         <div class="d-flex justify-content-center gap-2">
@@ -91,5 +91,4 @@
         </tbody>
     </table>
 </div>
-
 @endsection

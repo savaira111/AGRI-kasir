@@ -11,12 +11,10 @@ return new class extends Migration
         Schema::create('pembayaran', function (Blueprint $table) {
             $table->id('id_pembayaran');
             $table->unsignedBigInteger('id_transaksi');
-            // foreign key ke transaksi_penjualan.id
             $table->foreign('id_transaksi')
                   ->references('id')
                   ->on('transaksi')
                   ->cascadeOnDelete();
-
             $table->string('metode_pembayaran');
             $table->integer('jumlah_bayar');
             $table->integer('kembalian')->default(0);

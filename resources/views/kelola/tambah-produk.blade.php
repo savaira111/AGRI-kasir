@@ -31,6 +31,48 @@
     <div class="card shadow-sm border-0 p-4" style="background-color: #C0EBA6; border-radius: 15px;">
         <form action="{{ route('produk.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
+
+            <!-- Kode Produk Otomatis -->
+            <div class="mb-3">
+                <label for="kode_produk_otomatis" class="form-label fw-semibold">Kode Produk Otomatis</label>
+                <input type="text" id="kode_produk_otomatis" name="kode_produk_otomatis" class="form-control" value="{{ $kodeOtomatis }}" readonly>
+            </div>
+
+            <!-- Tanggal Input Otomatis -->
+            <div class="mb-3">
+                <label for="tanggal_input_otomatis" class="form-label fw-semibold">Tanggal Input Otomatis</label>
+                <input type="date" id="tanggal_input_otomatis" name="tanggal_input_otomatis" class="form-control" value="{{ date('Y-m-d') }}" readonly>
+            </div>
+
+            <!-- Dropdown Kategori -->
+            <div class="mb-3">
+                <label for="kategori_produk_dropdown" class="form-label fw-semibold">Pilih Kategori</label>
+                <select id="kategori_produk_dropdown" name="kategori_produk_dropdown" class="form-select">
+                    <option value="">-- Pilih Kategori --</option>
+                    @foreach($kategori as $k)
+                        <option value="{{ $k->id }}">{{ $k->nama_kategori }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <!-- Dropdown Satuan -->
+            <div class="mb-3">
+                <label for="satuan_produk_dropdown" class="form-label fw-semibold">Pilih Satuan</label>
+                <select id="satuan_produk_dropdown" name="satuan_produk_dropdown" class="form-select">
+                    <option value="">-- Pilih Satuan --</option>
+                    @foreach($satuan as $s)
+                        <option value="{{ $s->id }}">{{ $s->nama_satuan }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <!-- Stok Awal -->
+            <div class="mb-3">
+                <label for="stok_awal" class="form-label fw-semibold">Stok Awal</label>
+                <input type="number" id="stok_awal" name="stok_awal" class="form-control" value="0" readonly>
+            </div>
+
+            <!-- Input Lama Tetap Ada -->
             <div class="mb-3">
                 <label for="kode_produk" class="form-label fw-semibold">Kode produk</label>
                 <input type="text" id="kode_produk" name="kode_produk" class="form-control" placeholder="Isi kode produk" required>
@@ -48,17 +90,17 @@
 
             <div class="mb-3">
                 <label for="kategori_produk" class="form-label fw-semibold">Kategori produk</label>
-                <input type="text" id="kategori_produk" name="kategori" class="form-control" placeholder="Isi kategori produk" required>
+                <input type="text" id="kategori_produk" name="kategori_produk" class="form-control" placeholder="Isi kategori produk" required>
             </div>
 
             <div class="mb-3">
                 <label for="stok" class="form-label fw-semibold">Stok</label>
-                <input type="number" id="stok" name="stok" class="form-control" placeholder="Isi stok produk" required>
+                <input type="number" id="stok_produk" name="stok_produk" class="form-control" placeholder="Isi stok produk" required>
             </div>
 
             <div class="mb-3">
                 <label for="satuan" class="form-label fw-semibold">Satuan</label>
-                <input type="text" id="satuan" name="satuan" class="form-control" placeholder="Isi satuan produk" required>
+                <input type="text" id="satuan_produk" name="satuan_produk" class="form-control" placeholder="Isi satuan produk" required>
             </div>
 
             <div class="mb-3">
@@ -83,7 +125,7 @@
 
             <div class="mb-3">
                 <label for="tanggal_kadaluwarsa" class="form-label fw-semibold">Tanggal kadaluarsa</label>
-                <input type="date" id="tanggal_kadaluwarsa" name="tanggal_kadaluwarsa" class="form-control">
+                <input type="date" id="tanggal_kadaluarsa" name="tanggal_kadaluarsa" class="form-control">
             </div>
 
             <div class="mb-3">

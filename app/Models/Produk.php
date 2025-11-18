@@ -23,7 +23,7 @@ class Produk extends Model
 
     protected $casts = [
         'harga_jual' => 'integer',
-        'stok' => 'integer',
+        'stok_produk' => 'integer',
     ];
 
     // Relasi ke detail transaksi

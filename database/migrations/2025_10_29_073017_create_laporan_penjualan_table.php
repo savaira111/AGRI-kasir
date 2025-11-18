@@ -10,14 +10,14 @@ return new class extends Migration
     {
         Schema::create('laporan_penjualan', function (Blueprint $table) {
             $table->id('id_laporan');
-            $table->string('periode'); // contoh: "Oktober 2025"
-            $table->decimal('total_penjualan', 10, 2); // total uang masuk selama periode
-            $table->integer('total_transaksi'); // jumlah transaksi selama periode
-             $table->decimal('total_laba',10,2); // jumlah laba selama periode
-            $table->unsignedBigInteger('dibuat_oleh')->nullable(); // id user (admin)
+            $table->string('periode'); 
+            $table->decimal('total_penjualan', 10, 2); 
+            $table->integer('total_transaksi'); 
+             $table->decimal('total_laba',10,2); 
+            $table->unsignedBigInteger('dibuat_oleh')->nullable(); 
             $table->timestamps();
 
-            // relasi ke tabel user
+            
             $table->foreign('dibuat_oleh')
                   ->references('id')
                   ->on('users')

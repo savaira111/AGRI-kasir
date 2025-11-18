@@ -10,17 +10,11 @@ return new class extends Migration
     {
         Schema::create('transaksi', function (Blueprint $table) {
             $table->bigIncrements('id');
-
-            // FK ke users
             $table->unsignedBigInteger('id_user');
-
             $table->date('tanggal_transaksi');
             $table->decimal('total_harga', 15, 2);
-            $table->string('status_transaksi')->nullable();
             $table->string('metode_pembayaran')->nullable();
             $table->timestamps();
-
-            // FOREIGN KEY
             $table->foreign('id_user')
                   ->references('id')
                   ->on('users')

@@ -7,26 +7,25 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Jalankan migration.
+     * Run the migrations.
      */
     public function up(): void
     {
         Schema::create('produk', function (Blueprint $table) {
-            $table->id('id_produk'); // Primary Key
-            $table->string('kode_produk')->nullable(); // Kode unik (opsional)
-            $table->string('nama_produk'); // Nama barang
+            $table->id('id_produk'); 
+            $table->string('kode_produk')->nullable();
+            $table->string('nama_produk'); 
             $table->string('nama_pemasok')->nullable();
-            $table->integer('stok_produk')->default(0); // Jumlah stok
-            $table->decimal('harga_jual', 10, 2)->nullable(); // Harga jual
-            $table->decimal('harga_beli', 10, 2)->nullable(); // Harga beli
-            $table->string('kategori_produk')->nullable(); // Contoh: Pupuk, Obat, Alat Pertanian
-            $table->string('satuan_produk')->nullable(); // kg, liter, pcs
-            $table->string('foto_produk')->nullable(); // Nama file gambar
-            $table->text('deskripsi_produk')->nullable(); // Deskripsi tambahan
-            $table->string('status_produk')->default('aktif'); // aktif / nonaktif
-            $table->date('tanggal_input')->nullable(); // Tanggal barang masuk
-            $table->date('tanggal_kadaluarsa')->nullable(); // Kadaluarsa (kalau ada)
-            $table->timestamps(); // created_at dan updated_at
+            $table->integer('stok_produk')->default(0); 
+            $table->decimal('harga_jual', 10, 2)->nullable(); 
+            $table->decimal('harga_beli', 10, 2)->nullable(); 
+            $table->string('kategori_produk')->nullable(); 
+            $table->string('satuan_produk')->nullable(); 
+            $table->string('foto_produk')->nullable(); 
+            $table->text('deskripsi_produk')->nullable(); 
+            $table->date('tanggal_input')->nullable(); 
+            $table->date('tanggal_kadaluarsa')->nullable(); 
+            $table->timestamps(); 
         });
     }
 

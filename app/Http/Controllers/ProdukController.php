@@ -38,11 +38,11 @@ class ProdukController extends Controller
             'kode_produk' => 'nullable|string|max:100',
             'nama_produk' => 'required|string|max:255',
             'nama_pemasok' => 'nullable|string|max:255',
-            'stok' => 'required|integer|min:0',
+            'stok_produk' => 'required|integer|min:0',
             'harga_jual' => 'nullable|numeric|min:0',
             'harga_beli' => 'nullable|numeric|min:0',
-            'kategori' => 'nullable|string|max:100',
-            'satuan' => 'nullable|string|max:50',
+            'kategori_produk' => 'nullable|string|max:100',
+            'satuan_produk' => 'nullable|string|max:50',
             'foto_produk' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'deskripsi_produk' => 'nullable|string',
             'status_produk' => 'nullable|in:aktif,nonaktif',
@@ -50,47 +50,42 @@ class ProdukController extends Controller
             'tanggal_kadaluarsa' => 'nullable|date|after_or_equal:tanggal_input',
         ]);
 
-        // Jika ada file, simpan ke storage/app/public/produk dan simpan nama file ke DB
-            $namaFile = null;
-            if ($request->hasFile('foto_produk')) {
-                $file = $request->file('foto_produk');
-                $namaFile = time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
-                // simpan di storage/app/public/produk
-                $file->storeAs('public/produk', $namaFile);
-            }
-
         $produk = new Produk();
+
+        // Simpan foto jika ada
+        if ($request->hasFile('foto_produk')) {
+            $file = $request->file('foto_produk');
+            $namaFile = time().'_'.preg_replace('/\s+/', '_', $file->getClientOriginalName());
+            $file->storeAs('produk', $namaFile, 'public');
+            $produk->foto_produk = 'produk/'.$namaFile;
+        }
+
+        // simpan data lain
         $produk->kode_produk = $request->kode_produk;
         $produk->nama_produk = $request->nama_produk;
         $produk->nama_pemasok = $request->nama_pemasok;
-        $produk->stok = $request->stok;
+        $produk->stok_produk = $request->stok_produk;
         $produk->harga_jual = $request->harga_jual;
         $produk->harga_beli = $request->harga_beli;
-        $produk->kategori = $request->kategori;
-        $produk->satuan = $request->satuan;
+        $produk->kategori_produk = $request->kategori_produk;
+        $produk->satuan_produk = $request->satuan_produk;
         $produk->deskripsi_produk = $request->deskripsi_produk;
         $produk->status_produk = $request->status_produk ?? 'aktif';
         $produk->tanggal_input = $request->tanggal_input;
         $produk->tanggal_kadaluarsa = $request->tanggal_kadaluarsa;
-
-        if ($request->hasFile('foto_produk')) {
-            $file = $request->file('foto_produk');
-            $filename = time().'_'.$file->getClientOriginalName();
-            $file->storeAs('produk', $filename, 'public');
-            $produk->foto_produk = 'produk/' . $filename;
-        }
 
         $produk->save();
 
         return redirect()->route('produk.index')->with('success', 'Produk berhasil ditambahkan!');
     }
 
-    // 🌿 Form edit produk
+    // 🌿 Edit produk
     public function edit($id)
     {
         $produk = Produk::findOrFail($id);
         return view('kelola.edit-produk', compact('produk'));
     }
+
 
     // 🌿 Update produk
     public function update(Request $request, $id)
@@ -99,11 +94,11 @@ class ProdukController extends Controller
             'kode_produk' => 'nullable|string|max:100',
             'nama_produk' => 'required|string|max:255',
             'nama_pemasok' => 'nullable|string|max:255',
-            'stok' => 'required|integer|min:0',
+            'stok_produk' => 'required|integer|min:0',
             'harga_jual' => 'nullable|numeric|min:0',
             'harga_beli' => 'nullable|numeric|min:0',
-            'kategori' => 'nullable|string|max:100',
-            'satuan' => 'nullable|string|max:50',
+            'kategori_produk' => 'nullable|string|max:100',
+            'satuan_produk' => 'nullable|string|max:50',
             'foto_produk' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'deskripsi_produk' => 'nullable|string',
             'status_produk' => 'nullable|in:aktif,nonaktif',
@@ -111,50 +106,36 @@ class ProdukController extends Controller
             'tanggal_kadaluarsa' => 'nullable|date|after_or_equal:tanggal_input',
         ]);
 
-
-        // Jika upload foto baru
-        if ($request->hasFile('foto_produk')) {
-
-        // Hapus foto lama jika ada
-        if ($produk->foto_produk && file_exists(storage_path('app/public/produk/' . $produk->foto_produk))) {
-            unlink(storage_path('app/public/produk/' . $produk->foto_produk));
-        }
-
-        // Simpan foto baru
-        $file = $request->file('foto_produk');
-        $namaFile = time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
-        $file->storeAs('public/produk', $namaFile);
-
-        $produk->foto_produk = $namaFile;
-    }
-
         $produk = Produk::findOrFail($id);
 
-        $produk->kode_produk = $request->kode_produk;
-        $produk->nama_produk = $request->nama_produk;
-        $produk->nama_pemasok = $request->nama_pemasok;
-        $produk->stok = $request->stok;
-        $produk->harga_jual = $request->harga_jual;
-        $produk->harga_beli = $request->harga_beli;
-        $produk->kategori = $request->kategori;
-        $produk->satuan = $request->satuan;
-        $produk->deskripsi_produk = $request->deskripsi_produk;
-        $produk->status_produk = $request->status_produk ?? 'aktif';
-        $produk->tanggal_input = $request->tanggal_input;
-        $produk->tanggal_kadaluarsa = $request->tanggal_kadaluarsa;
-
+        // Jika ada upload foto baru
         if ($request->hasFile('foto_produk')) {
 
-            // hapus file lama
+            // Hapus foto lama
             if ($produk->foto_produk && Storage::disk('public')->exists($produk->foto_produk)) {
                 Storage::disk('public')->delete($produk->foto_produk);
             }
 
+            // Upload foto baru
             $file = $request->file('foto_produk');
-            $filename = time().'_'.$file->getClientOriginalName();
-            $file->storeAs('produk', $filename, 'public');
-            $produk->foto_produk = 'produk/' . $filename;
+            $namaFile = time().'_'.preg_replace('/\s+/', '_', $file->getClientOriginalName());
+            $file->storeAs('produk', $namaFile, 'public');
+            $produk->foto_produk = 'produk/'.$namaFile;
         }
+
+        // update data lain
+        $produk->kode_produk = $request->kode_produk;
+        $produk->nama_produk = $request->nama_produk;
+        $produk->nama_pemasok = $request->nama_pemasok;
+        $produk->stok_produk = $request->stok_produk;
+        $produk->harga_jual = $request->harga_jual;
+        $produk->harga_beli = $request->harga_beli;
+        $produk->kategori_produk = $request->kategori_produk;
+        $produk->satuan_produk = $request->satuan_produk;
+        $produk->deskripsi_produk = $request->deskripsi_produk;
+        $produk->status_produk = $request->status_produk ?? 'aktif';
+        $produk->tanggal_input = $request->tanggal_input;
+        $produk->tanggal_kadaluarsa = $request->tanggal_kadaluarsa;
 
         $produk->save();
 
@@ -181,6 +162,4 @@ class ProdukController extends Controller
         $produk = Produk::findOrFail($id);
         return view('kelola.detail_produk', compact('produk'));
     }
-
-    
 }

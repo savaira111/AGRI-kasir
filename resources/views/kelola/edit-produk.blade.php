@@ -53,20 +53,20 @@
 
             <div class="mb-3">
                 <label for="kategori_produk" class="form-label fw-semibold">Kategori produk</label>
-                <input type="text" id="kategori_produk" name="kategori" class="form-control" 
-                       value="{{ $produk->kategori }}" required>
+                <input type="text" id="kategori_produk" name="kategori_produk" class="form-control" 
+                       value="{{ $produk->kategori_produk }}" required>
             </div>
 
             <div class="mb-3">
                 <label for="stok" class="form-label fw-semibold">Stok</label>
-                <input type="number" id="stok" name="stok" class="form-control" 
-                       value="{{ $produk->stok }}" required>
+                <input type="number" id="stok_produk" name="stok_produk" class="form-control" 
+                       value="{{ $produk->stok_produk }}" required>
             </div>
 
             <div class="mb-3">
                 <label for="satuan" class="form-label fw-semibold">Satuan</label>
-                <input type="text" id="satuan" name="satuan" class="form-control" 
-                       value="{{ $produk->satuan }}" required>
+                <input type="text" id="satuan_produk" name="satuan_produk" class="form-control" 
+                       value="{{ $produk->satuan_produk }}" required>
             </div>
 
             <div class="mb-3">
@@ -94,7 +94,7 @@
 
             <div class="mb-3">
                 <label for="tanggal_kadaluwarsa" class="form-label fw-semibold">Tanggal kadaluarsa</label>
-                <input type="date" id="tanggal_kadaluwarsa" name="tanggal_kadaluwarsa" class="form-control" 
+                <input type="date" id="tanggal_kadaluarsa" name="tanggal_kadaluarsa" class="form-control" 
                        value="{{ $produk->tanggal_kadaluarsa }}">
             </div>
 
@@ -103,7 +103,7 @@
                 <input type="file" id="foto_produk" name="foto_produk" class="form-control">
                 @if ($produk->foto_produk)
                     <div class="mt-2 text-center">
-                        <img src="{{ asset('storage/' . $produk->foto_produk) }}" alt="Foto Produk" width="100" class="rounded shadow">
+                        <img src="{{ asset('storage/produk' . $produk->foto_produk) }}" alt="Foto Produk" width="100" class="rounded shadow">
                     </div>
                 @endif
             </div>

@@ -14,7 +14,6 @@ class TransaksiSeeder extends Seeder
             'id_user' => 1, 
             'tanggal_transaksi' => now(),
             'total_harga' => 70000,
-            'status' => 'selesai',
             'metode_pembayaran' => 'cash',
         ]);
 
@@ -23,7 +22,6 @@ class TransaksiSeeder extends Seeder
             'id_user' => 1,
             'tanggal_transaksi' => now(),
             'total_harga' => 120000,
-            'status' => 'selesai',
             'metode_pembayaran' => 'cash',
         ]);
     }

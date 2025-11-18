@@ -6,17 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Transaction extends Model
 {
-    protected $table = 'transactions'; // sesuai migration
-    protected $primaryKey = 'id'; // OK
+    protected $table = 'transaksi'; 
+    protected $primaryKey = 'id'; 
 
     protected $guarded = [];
 
-    // Relasi ke users
-    public function users()
-{
-    return $this->belongsTo(User::class, 'id_user', 'id');
-}
-
+    // Relasi ke user (benarnya singular)
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user', 'id');
+    }
 
     // Relasi ke detail transaksi
     public function detailTransaksi()
