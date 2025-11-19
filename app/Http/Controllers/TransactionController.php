@@ -7,6 +7,7 @@ use App\Models\Transaction;
 use App\Models\DetailTransaksi;
 use App\Models\User;
 use App\Models\Produk;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
@@ -30,25 +31,36 @@ class TransactionController extends Controller
 
     public function store(Request $request)
     {
+        // VALIDASI
         $request->validate([
             'id_user' => 'required|exists:users,id',
             'total_harga' => 'required|numeric|min:1',
             'produk_id' => 'required|array|min:1',
-            'jumlah' => 'required|array',
-            'jumlah.*' => 'numeric|min:1',
-            'metode_pembayaran' => 'required|in:cash,transfer',
+            'metode_pembayaran' => 'required|in:cash,qris',
+            'bayar' => 'nullable|numeric|min:0',
+            'kembalian' => 'nullable|numeric|min:0',
         ]);
 
         DB::beginTransaction();
 
         try {
 
+            // HITUNG KEMBALIAN (Jika cash)
+            $kembalian = 0;
+
+            if ($request->metode_pembayaran == 'cash') {
+                $kembalian = $request->bayar - $request->total_harga;
+
+            }
+
             // SIMPAN TRANSAKSI UTAMA
             $transaksi = Transaction::create([
-                'id_user' => $request->id_user,
-                'tanggal_transaksi' => now(),
-                'total_harga' => $request->total_harga,
-                'metode_pembayaran' => $request->metode_pembayaran,
+                'id_user'            => $request->id_user,
+                'tanggal_transaksi'  => now(),
+                'total_harga'        => $request->total_harga,
+                'metode_pembayaran'  => $request->metode_pembayaran,
+                'bayar'              => $request->bayar,
+                'kembalian'          => $kembalian,
             ]);
 
             // SIMPAN DETAIL TRANSAKSI
@@ -56,10 +68,6 @@ class TransactionController extends Controller
 
                 $jumlah = (int)$request->jumlah[$i];
                 $produk = Produk::findOrFail($id_produk);
-
-                if ($produk->stok < $jumlah) {
-                    throw new \Exception("Stok produk {$produk->nama_produk} tidak mencukupi!");
-                }
 
                 $subtotal = $jumlah * $produk->harga_jual;
 
@@ -71,13 +79,13 @@ class TransactionController extends Controller
                 ]);
 
                 // KURANGI STOK
-                $produk->stok -= $jumlah;
+                $produk->stok_produk -= $jumlah;
                 $produk->save();
             }
 
             DB::commit();
 
-            return redirect()->route('transactions.index')
+            return redirect()->route('transactions.show', $transaksi->id)
                 ->with('success', 'Transaksi berhasil dibuat!');
 
         } catch (\Exception $e) {
@@ -109,4 +117,15 @@ class TransactionController extends Controller
 
         return response()->json($produk);
     }
+
+       public function pdf($id)
+    {
+        $transaksi = Transaction::with('detailTransaksi.produk', 'user')->findOrFail($id);
+
+        $pdf = Pdf::loadView('transactions.pdf', compact('transaksi'))
+                ->setPaper('a4', 'portrait');
+
+        return $pdf->download('struk-transaksi-'.$transaksi->id.'.pdf');
+    }
+
 }

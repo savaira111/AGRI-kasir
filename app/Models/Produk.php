@@ -10,9 +10,9 @@ class Produk extends Model
     use HasFactory;
 
     protected $table = 'produk';
-    protected $primaryKey = 'id_produk'; 
-    public $incrementing = false; 
-    protected $keyType = 'string'; 
+    protected $primaryKey = 'id_produk';
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $guarded = [];
 
@@ -23,25 +23,14 @@ class Produk extends Model
 
     protected $casts = [
         'harga_jual' => 'integer',
-        'stok_produk' => 'integer',
+        'stok' => 'integer', // Diperbaiki sesuai controller
     ];
 
     // Relasi ke detail transaksi
     public function detailTransaksi()
     {
-        return $this->hasMany(DetailTransaksi::class, 'id_produk');
+        return $this->hasMany(DetailTransaksi::class, 'id_produk', 'id_produk');
     }
-
-    // ❌ Hapus relasi ke Pemasok & Kategori karena modelnya tidak ada
-    // public function pemasok()
-    // {
-    //     return $this->belongsTo(Pemasok::class, 'id_pemasok');
-    // }
-
-    // public function kategori()
-    // {
-    //     return $this->belongsTo(Kategori::class, 'id_kategori');
-    // }
 
     protected static function boot()
     {
@@ -53,4 +42,10 @@ class Produk extends Model
             }
         });
     }
+    
+    public function getTanggalInputFormattedAttribute()
+    {
+        return \Carbon\Carbon::parse($this->tanggal_input)->format('d-m-Y');
+    }
+
 }

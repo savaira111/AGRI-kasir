@@ -19,15 +19,15 @@ class DetailTransaksi extends Model
         'subtotal',
     ];
 
-    // relasi ke transaksi utama
+    // Relasi ke transaksi utama
     public function transaksi()
     {
-        return $this->belongsTo(Transaction::class, 'id_transaksi');
+        return $this->belongsTo(Transaction::class, 'id_transaksi', 'id');
     }
 
-    // relasi ke produk
+    // Relasi ke produk (DIPERBAIKI)
     public function produk()
     {
-        return $this->belongsTo(Produk::class, 'id_produk');
+        return $this->belongsTo(Produk::class, 'id_produk', 'id_produk');
     }
 }

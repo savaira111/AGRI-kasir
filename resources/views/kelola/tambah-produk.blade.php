@@ -24,7 +24,7 @@
            style="width: 40px; height: 40px;">
             <i class="bi bi-arrow-left-short fs-4 text-dark"></i>
         </a>
-        <h4 class="m-0 fw-bold">Halaman Tambah data produk</h4>
+        <h4 class="m-0 fw-bold">Halaman Tambah Data Produk</h4>
     </div>
 
     <!-- Card form -->
@@ -44,95 +44,82 @@
                 <input type="date" id="tanggal_input_otomatis" name="tanggal_input_otomatis" class="form-control" value="{{ date('Y-m-d') }}" readonly>
             </div>
 
-            <!-- Dropdown Kategori -->
+            <!-- Kategori (input teks, bukan dropdown) -->
             <div class="mb-3">
-                <label for="kategori_produk_dropdown" class="form-label fw-semibold">Pilih Kategori</label>
-                <select id="kategori_produk_dropdown" name="kategori_produk_dropdown" class="form-select">
-                    <option value="">-- Pilih Kategori --</option>
-                    @foreach($kategori as $k)
-                        <option value="{{ $k->id }}">{{ $k->nama_kategori }}</option>
-                    @endforeach
-                </select>
+                <label for="kategori_produk" class="form-label fw-semibold">Kategori Produk</label>
+                <input type="text" id="kategori_produk" name="kategori_produk" class="form-control" placeholder="Isi kategori produk" required>
             </div>
 
             <!-- Dropdown Satuan -->
             <div class="mb-3">
                 <label for="satuan_produk_dropdown" class="form-label fw-semibold">Pilih Satuan</label>
-                <select id="satuan_produk_dropdown" name="satuan_produk_dropdown" class="form-select">
+                <select id="satuan_produk_dropdown" name="satuan_produk" class="form-select" required>
                     <option value="">-- Pilih Satuan --</option>
-                    @foreach($satuan as $s)
-                        <option value="{{ $s->id }}">{{ $s->nama_satuan }}</option>
-                    @endforeach
+                    <option value="Kg">Kg</option>
+                    <option value="Gram">Gram</option>
+                    <option value="Liter">Liter</option>
+                    <option value="Pcs">Pcs</option>
+                    <option value="Botol">Botol</option>
+                    <option value="Pack">Pack</option>
+                    <option value="Box">Box</option>
                 </select>
             </div>
 
-            <!-- Stok Awal -->
+            <!-- Input Kode Produk Manual -->
             <div class="mb-3">
-                <label for="stok_awal" class="form-label fw-semibold">Stok Awal</label>
-                <input type="number" id="stok_awal" name="stok_awal" class="form-control" value="0" readonly>
-            </div>
-
-            <!-- Input Lama Tetap Ada -->
-            <div class="mb-3">
-                <label for="kode_produk" class="form-label fw-semibold">Kode produk</label>
+                <label for="kode_produk" class="form-label fw-semibold">Kode Produk</label>
                 <input type="text" id="kode_produk" name="kode_produk" class="form-control" placeholder="Isi kode produk" required>
             </div>
 
+            <!-- Nama Produk -->
             <div class="mb-3">
-                <label for="nama_produk" class="form-label fw-semibold">Nama produk</label>
+                <label for="nama_produk" class="form-label fw-semibold">Nama Produk</label>
                 <input type="text" id="nama_produk" name="nama_produk" class="form-control" placeholder="Isi nama produk" required>
             </div>
 
+            <!-- Nama Pemasok -->
             <div class="mb-3">
-                <label for="nama_pemasok" class="form-label fw-semibold">Nama pemasok</label>
+                <label for="nama_pemasok" class="form-label fw-semibold">Nama Pemasok</label>
                 <input type="text" id="nama_pemasok" name="nama_pemasok" class="form-control" placeholder="Isi nama pemasok" required>
             </div>
 
+            <!-- Stok Produk -->
             <div class="mb-3">
-                <label for="kategori_produk" class="form-label fw-semibold">Kategori produk</label>
-                <input type="text" id="kategori_produk" name="kategori_produk" class="form-control" placeholder="Isi kategori produk" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="stok" class="form-label fw-semibold">Stok</label>
+                <label for="stok_produk" class="form-label fw-semibold">Stok</label>
                 <input type="number" id="stok_produk" name="stok_produk" class="form-control" placeholder="Isi stok produk" required>
             </div>
 
+            <!-- Harga Jual -->
             <div class="mb-3">
-                <label for="satuan" class="form-label fw-semibold">Satuan</label>
-                <input type="text" id="satuan_produk" name="satuan_produk" class="form-control" placeholder="Isi satuan produk" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="harga_jual" class="form-label fw-semibold">Harga jual</label>
+                <label for="harga_jual" class="form-label fw-semibold">Harga Jual</label>
                 <input type="number" id="harga_jual" name="harga_jual" class="form-control" placeholder="Isi harga jual produk" required>
             </div>
 
+            <!-- Harga Beli -->
             <div class="mb-3">
-                <label for="harga_beli" class="form-label fw-semibold">Harga beli</label>
+                <label for="harga_beli" class="form-label fw-semibold">Harga Beli</label>
                 <input type="number" id="harga_beli" name="harga_beli" class="form-control" placeholder="Isi harga beli produk" required>
             </div>
 
+            <!-- Deskripsi Produk -->
             <div class="mb-3">
                 <label for="deskripsi" class="form-label fw-semibold">Deskripsi</label>
                 <textarea id="deskripsi" name="deskripsi_produk" rows="2" class="form-control" placeholder="Isi deskripsi produk"></textarea>
             </div>
 
+            <!-- Tanggal Kadaluarsa -->
             <div class="mb-3">
-                <label for="tanggal_input" class="form-label fw-semibold">Tanggal input</label>
-                <input type="date" id="tanggal_input" name="tanggal_input" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="tanggal_kadaluwarsa" class="form-label fw-semibold">Tanggal kadaluarsa</label>
+                <label for="tanggal_kadaluarsa" class="form-label fw-semibold">Tanggal Kadaluarsa</label>
                 <input type="date" id="tanggal_kadaluarsa" name="tanggal_kadaluarsa" class="form-control">
             </div>
 
+            <!-- Foto Produk -->
             <div class="mb-3">
-                <label for="foto_produk" class="form-label fw-semibold">Pilih foto produk</label>
+                <label for="foto_produk" class="form-label fw-semibold">Pilih Foto Produk</label>
                 <input type="file" id="foto_produk" name="foto_produk" class="form-control">
             </div>
 
+            <!-- Submit -->
             <div class="d-flex justify-content-end">
                 <button type="submit" class="btn fw-bold px-4" 
                         style="background-color: #FCCD2A; color: black; border-radius: 12px;">

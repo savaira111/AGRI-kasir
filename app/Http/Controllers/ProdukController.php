@@ -28,7 +28,37 @@ class ProdukController extends Controller
     // 🌿 Form tambah produk
     public function create()
     {
-        return view('kelola.tambah-produk');
+            // Tahun dan bulan sekarang
+        $year = date('y'); // 2 digit tahun
+        $month = date('m'); // 2 digit bulan
+
+        // Prefix: PRD + YY + MM
+        $prefix = "PRD{$year}{$month}";
+
+        // Ambil produk terakhir dengan prefix bulan tahun ini
+        $lastProduct = Produk::where('kode_produk', 'LIKE', $prefix . '%')
+                        ->orderBy('kode_produk', 'desc')
+                        ->first();
+
+        if ($lastProduct) {
+        // Ambil nomor urut terakhir (3 digit paling belakang)
+        $lastNumber = intval(substr($lastProduct->kode_produk, -3));
+        $nextNumber = $lastNumber + 1;
+     } else {
+        // Jika tidak ada produk bulan ini → mulai dari 1
+        $nextNumber = 1;
+        }
+
+        // Format 3 digit dengan leading zeros
+        $kodeOtomatis = $prefix . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
+
+        // Daftar satuan statis
+        $satuan = ['Kg', 'Liter', 'Pcs', 'Pack', 'Botol'];
+
+        // Tanggal hari ini otomatis
+        $tanggalHariIni = date('d-m-Y');
+
+        return view('kelola.tambah-produk', compact('kodeOtomatis', 'satuan', 'tanggalHariIni'));
     }
 
     // 🌿 Simpan produk baru
@@ -45,7 +75,6 @@ class ProdukController extends Controller
             'satuan_produk' => 'nullable|string|max:50',
             'foto_produk' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'deskripsi_produk' => 'nullable|string',
-            'status_produk' => 'nullable|in:aktif,nonaktif',
             'tanggal_input' => 'nullable|date',
             'tanggal_kadaluarsa' => 'nullable|date|after_or_equal:tanggal_input',
         ]);
@@ -70,7 +99,6 @@ class ProdukController extends Controller
         $produk->kategori_produk = $request->kategori_produk;
         $produk->satuan_produk = $request->satuan_produk;
         $produk->deskripsi_produk = $request->deskripsi_produk;
-        $produk->status_produk = $request->status_produk ?? 'aktif';
         $produk->tanggal_input = $request->tanggal_input;
         $produk->tanggal_kadaluarsa = $request->tanggal_kadaluarsa;
 
@@ -82,8 +110,38 @@ class ProdukController extends Controller
     // 🌿 Edit produk
     public function edit($id)
     {
-        $produk = Produk::findOrFail($id);
-        return view('kelola.edit-produk', compact('produk'));
+        // Tahun dan bulan sekarang
+            $year = date('y'); // 2 digit tahun
+         $month = date('m'); // 2 digit bulan
+
+        // Prefix: PRD + YY + MM
+            $prefix = "PRD{$year}{$month}";
+
+        // Ambil produk terakhir dengan prefix bulan tahun ini
+         $lastProduct = Produk::where('kode_produk', 'LIKE', $prefix . '%')
+                        ->orderBy('kode_produk', 'desc')
+                        ->first();
+
+            if ($lastProduct) {
+            // Ambil nomor urut terakhir (3 digit paling belakang)
+            $lastNumber = intval(substr($lastProduct->kode_produk, -3));
+            $nextNumber = $lastNumber + 1;
+            } else {
+            // Jika tidak ada produk bulan ini → mulai dari 1
+            $nextNumber = 1;
+         }
+
+        // Format 3 digit dengan leading zeros
+         $kodeOtomatis = $prefix . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
+
+        // Daftar satuan statis
+            $satuan = ['Kg', 'Liter', 'Pcs', 'Pack', 'Botol'];
+
+        // Tanggal hari ini otomatis
+            $tanggalHariIni = date('d-m-Y');
+
+            return view('kelola.tambah-produk', compact('kodeOtomatis', 'satuan', 'tanggalHariIni'));
+        
     }
 
 
@@ -101,7 +159,6 @@ class ProdukController extends Controller
             'satuan_produk' => 'nullable|string|max:50',
             'foto_produk' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'deskripsi_produk' => 'nullable|string',
-            'status_produk' => 'nullable|in:aktif,nonaktif',
             'tanggal_input' => 'nullable|date',
             'tanggal_kadaluarsa' => 'nullable|date|after_or_equal:tanggal_input',
         ]);
@@ -133,7 +190,6 @@ class ProdukController extends Controller
         $produk->kategori_produk = $request->kategori_produk;
         $produk->satuan_produk = $request->satuan_produk;
         $produk->deskripsi_produk = $request->deskripsi_produk;
-        $produk->status_produk = $request->status_produk ?? 'aktif';
         $produk->tanggal_input = $request->tanggal_input;
         $produk->tanggal_kadaluarsa = $request->tanggal_kadaluarsa;
 

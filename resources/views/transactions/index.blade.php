@@ -64,11 +64,7 @@
                                 Detail
                             </a>
 
-                            <!-- Button Print -->
-                            <a href="#" class="btn btn-sm btn-secondary">
-                                Cetak Struk
-                            </a>
-
+                            
                         </td>
                     </tr>
                     @empty

@@ -79,7 +79,7 @@
                 <div class="mb-2"><strong>Harga Jual:</strong> Rp {{ number_format($produk->harga_jual, 0, ',', '.') }}</div>
                 <div class="mb-2"><strong>Harga Beli:</strong> Rp {{ number_format($produk->harga_beli, 0, ',', '.') }}</div>
                 <div class="mb-2"><strong>Deskripsi:</strong> {{ $produk->deskripsi_produk }}</div>
-                <div class="mb-2"><strong>Tanggal Input:</strong> {{ $produk->tanggal_input }}</div>
+                <div class="mb-2"><strong>Tanggal Input:</strong> {{ \Carbon\Carbon::parse($produk->tanggal_input)->format('d-m-Y') }}</div>
                 <div class="mb-2"><strong>Tanggal Kadaluarsa:</strong> {{ $produk->tanggal_kadaluarsa }}</div>
 
            
