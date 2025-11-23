@@ -9,14 +9,19 @@
         @endif
 <div class="container mt-4">
 
+   <a href="{{ route('transactions.index') }}"
+   class="btn btn-warning rounded-circle d-flex align-items-center justify-content-center me-3"
+   style="width: 40px; height: 40px; margin-top: 30px; margin-left: 10px">
+    <i class="bi bi-arrow-left-short fs-4 text-dark"></i>
+</a>
+
+
+
     <div class="card shadow p-4">
 
         {{-- HEADER --}}
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4 class="fw-bold">Tambah Transaksi</h4>
-            <a href="{{ route('transactions.index') }}" class="btn btn-secondary btn-sm">
-                <i class="bi bi-arrow-left"></i> Kembali
-            </a>
         </div>
 
         {{-- FORM --}}
@@ -53,6 +58,7 @@
                 <tbody></tbody>
             </table>
 
+            <div id="fixed-footer">
             {{-- TOTAL --}}
             <div class="text-end mb-3">
                 <h5>Total: <span id="totalDisplay">0</span></h5>
@@ -67,10 +73,13 @@
                     <option value="qris">Qris</option>
                 </select>
             </div>
+            
             @include('transactions.modal-payment')
 
-            {{-- SUBMIT --}}
-            <button type="button" class="btn btn-warning w-100" id="openModalPembayaran">Pembayaran</button>
+                <button type="button" class="btn btn-warning w-100" id="openModalPembayaran">
+                    Pembayaran
+                </button>
+            </div>
 
         </form>
     </div>

@@ -19,8 +19,11 @@ class LaporanPenjualan extends Model
     protected $fillable = [
         'id_transaksi',
         'id_pembayaran',
+        'periode',
         'tanggal_laporan',
         'total_penjualan',
+        'total_transaksi',
+        'total_laba',
     ];
 
     // Relasi ke tabel Transaksi
@@ -35,5 +38,10 @@ class LaporanPenjualan extends Model
     public function pembayaran()
     {
         return $this->belongsTo(Pembayaran::class, 'id_pembayaran');
+    }
+
+    public function pembuat()
+    {
+        return $this->belongsTo(User::class, 'dibuat_oleh');
     }
 }

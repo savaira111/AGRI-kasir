@@ -5,7 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\AuthController;
-
+use App\Http\Controllers\LaporanPenjualanController;
 
 // ==========================
 // AUTH (Login - Logout)
@@ -65,15 +65,22 @@ Route::middleware('auth')->group(function () {
     // ============
     Route::prefix('transactions')->group(function () {
 
-        Route::get('/', [TransactionController::class, 'index'])->name('transactions.index');
-        Route::get('/create', [TransactionController::class, 'create'])->name('transactions.create');
-        Route::get('/search-product', [ProdukController::class, 'search'])->name('product.search');
-        Route::post('/', [TransactionController::class, 'store'])->name('transactions.store');
-        Route::get('/show/{id}', [TransactionController::class, 'show'])->name('transactions.show');
-        Route::delete('/{id}', [TransactionController::class, 'destroy'])->name('transactions.destroy');
-        Route::get('/back/index', function () {return redirect()->route('transactions.index');})->name('transactions.back');
-        Route::get('/transactions/pdf/{id}', [TransactionController::class, 'pdf'])->name('transactions.pdf');
+    Route::get('/', [TransactionController::class, 'index'])->name('transactions.index');
+    Route::get('/create', [TransactionController::class, 'create'])->name('transactions.create');
+    Route::get('/search-product', [ProdukController::class, 'search'])->name('product.search');
+    Route::post('/', [TransactionController::class, 'store'])->name('transactions.store');
+    Route::get('/show/{id}', [TransactionController::class, 'show'])->name('transactions.show');
+    Route::delete('/{id}', [TransactionController::class, 'destroy'])->name('transactions.destroy');
+    Route::get('/', [TransactionController::class, 'index'])->name('transactions.index');
+    Route::get('/pdf/{id}', [TransactionController::class, 'pdf'])->name('transactions.pdf');
     });
+
+    
+   Route::prefix('laporan')->group(function () {
+    Route::get('/', [LaporanPenjualanController::class, 'index'])->name('laporan.index');
+    Route::post('/generate', [LaporanPenjualanController::class, 'generate'])->name('laporan.generate');
+    Route::get('/export/{id}', [LaporanPenjualanController::class, 'exportPdf'])->name('laporan.exportPdf');
+});
 
 
 });

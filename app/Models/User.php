@@ -13,7 +13,6 @@ class User extends Authenticatable
     protected $table = 'users';
     protected $primaryKey = 'id';
 
-
     protected $fillable = [
         'name',
         'email',
@@ -30,9 +29,19 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    // Relasi ke tabel transaksi_penjualan
+    // ============================
+    // RELASI: USER → TRANSAKSI
+    // ============================
     public function transaksi()
     {
         return $this->hasMany(TransaksiPenjualan::class, 'id_user');
+    }
+
+    // ============================
+    // RELASI: USER → LAPORAN
+    // ============================
+    public function laporan()
+    {
+        return $this->hasMany(LaporanPenjualan::class, 'dibuat_oleh');
     }
 }

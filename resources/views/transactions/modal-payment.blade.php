@@ -57,13 +57,6 @@
                         <input type="text" id="modalTotal" class="form-control form-mini mt-1" readonly>
                     </div>
 
-                    <div>
-                        <span class="label-text">Metode pembayaran :</span><br>
-                        <select id="metodePembayaran" class="form-select form-mini mt-1">
-                            <option value="cash">Tunai</option>
-                            <option value="qris">QRIS</option>
-                        </select>
-                    </div>
 
                 </div>
 
@@ -118,16 +111,7 @@
     const cashBox = document.getElementById("cashBox");
     const qrisBox = document.getElementById("qrisBox");
 
-    // Ubah metode pembayaran
-    metodePembayaran.addEventListener("change", function () {
-        if (this.value === "cash") {
-            cashBox.classList.remove("d-none");
-            qrisBox.classList.add("d-none");
-        } else {
-            cashBox.classList.add("d-none");
-            qrisBox.classList.remove("d-none");
-        }
-    });
+
 
     // Hitung kembalian
     const jumlahBayar = document.getElementById("jumlahBayar");

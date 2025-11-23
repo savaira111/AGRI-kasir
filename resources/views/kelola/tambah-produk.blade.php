@@ -32,11 +32,11 @@
         <form action="{{ route('produk.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
-            <!-- Kode Produk Otomatis -->
-            <div class="mb-3">
-                <label for="kode_produk_otomatis" class="form-label fw-semibold">Kode Produk Otomatis</label>
-                <input type="text" id="kode_produk_otomatis" name="kode_produk_otomatis" class="form-control" value="{{ $kodeOtomatis }}" readonly>
-            </div>
+             <!-- Kode Produk Otomatis -->
+                <div class="mb-3">
+                    <label for="kode_produk" class="form-label fw-semibold">Kode Produk</label>
+                    <input type="text" id="kode_produk" name="kode_produk" class="form-control" value="{{ $kodeOtomatis }}" readonly>
+                </div>
 
             <!-- Tanggal Input Otomatis -->
             <div class="mb-3">
@@ -65,11 +65,8 @@
                 </select>
             </div>
 
-            <!-- Input Kode Produk Manual -->
-            <div class="mb-3">
-                <label for="kode_produk" class="form-label fw-semibold">Kode Produk</label>
-                <input type="text" id="kode_produk" name="kode_produk" class="form-control" placeholder="Isi kode produk" required>
-            </div>
+          
+
 
             <!-- Nama Produk -->
             <div class="mb-3">

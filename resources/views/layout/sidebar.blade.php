@@ -18,9 +18,10 @@
             </a>
         </li>
         <li>
-            <a href="#">
-                <i class="bi bi-bar-chart-line-fill"></i> <span>Laporan</span>
-            </a>
+            <a href="{{ route('laporan.index') }}">
+        <i class="bi bi-bar-chart-line-fill"></i> <span>Laporan</span>
+        </a>
+
         </li>
     </ul>
 </div>

@@ -7,7 +7,7 @@
          style="background-color: #C0EBA6;">
         <div>
             <h4 class="fw-bold" style="font-size:30px;">
-                Selamat Datang, <span style="color:#356b3f;">Owner</span>
+                Selamat Datang, <span style="color:#356b3f;">Admin</span>
             </h4>
             <p class="mb-0">Senang melihatmu kembali di AGRI 🌱</p>
         </div>
@@ -22,25 +22,35 @@
 
     <!-- Statistik -->
     <div class="row mt-4 g-3">
-        <div class="col-md-4">
-            <div class="p-3 rounded shadow-sm d-flex flex-column" style="background-color: white; border-left: 6px solid #6fa36f;">
-                <h6 class="mb-2" style="color: #6fa36f;">Total Produk</h6>
-                <h4 class="fw-bold">{{ $totalProduk ?? 128 }}</h4>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="p-3 rounded shadow-sm d-flex flex-column" style="background-color: white; border-left: 6px solid #FCCD2A;">
-                <h6 class="mb-2" style="color: #FCCD2A;">Total Transaksi</h6>
-                <h4 class="fw-bold">{{ $totalTransaksi ?? 4679 }}</h4>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="p-3 rounded shadow-sm d-flex flex-column" style="background-color: white; border-left: 6px solid #6fa36f;">
-                <h6 class="mb-2" style="color: #6fa36f;">Pendapatan</h6>
-                <h4 class="fw-bold">Rp{{ number_format($totalPendapatan ?? 12762000, 0, ',', '.') }}</h4>
-            </div>
+    <div class="col-md-3">
+        <div class="p-3 rounded shadow-sm" style="background-color: white; border-left: 6px solid #6fa36f;">
+            <h6 class="mb-2" style="color: #6fa36f;">Total Produk</h6>
+            <h4 class="fw-bold">{{ $totalProduk ?? 128 }}</h4>
         </div>
     </div>
+
+    <div class="col-md-3">
+        <div class="p-3 rounded shadow-sm" style="background-color: white; border-left: 6px solid #FCCD2A;">
+            <h6 class="mb-2" style="color: #FCCD2A;">Total Transaksi</h6>
+            <h4 class="fw-bold">{{ $totalTransaksi ?? 4679 }}</h4>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="p-3 rounded shadow-sm" style="background-color: white; border-left: 6px solid #6fa36f;">
+            <h6 class="mb-2" style="color: #6fa36f;">Pendapatan</h6>
+            <h4 class="fw-bold">Rp{{ number_format($totalPendapatan ?? 12762000, 0, ',', '.') }}</h4>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="p-3 rounded shadow-sm" style="background-color: white; border-left: 6px solid #FCCD2A;">
+            <h6 class="mb-2" style="color: #FCCD2A;">Keuntungan</h6>
+            <h4 class="fw-bold">{{ $total_laba ?? 4679 }}</h4>
+        </div>
+    </div>
+</div>
+
 
     <!-- Chart Revenue -->
     <div class="mt-5 bg-white rounded p-4 shadow-sm">
