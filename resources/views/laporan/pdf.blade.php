@@ -13,7 +13,8 @@
 <body>
 
     <h2>Laporan Penjualan - Periode {{ $laporan->periode }}</h2>
-    <p><strong>Dibuat oleh:</strong> {{ $laporan->pembuat->name ?? '-' }}</p>
+
+    <p><strong>Dibuat oleh:</strong> Admin</p>
     <p><strong>Tanggal Dicetak:</strong> {{ now()->format('d-m-Y') }}</p>
 
     <table>
@@ -24,10 +25,6 @@
         <tr>
             <th>Total Transaksi</th>
             <td>{{ $laporan->total_transaksi }}</td>
-        </tr>
-        <tr>
-            <th>Total Laba</th>
-            <td>Rp {{ number_format($laporan->total_laba, 0, ',', '.') }}</td>
         </tr>
     </table>
 

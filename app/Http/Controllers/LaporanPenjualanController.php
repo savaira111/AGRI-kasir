@@ -28,9 +28,8 @@ class LaporanPenjualanController extends Controller
         return view('laporan.index', compact('laporan', 'periode'));
     }
 
-
     // ======================================================
-    //  GENERATE LAPORAN BARU (BERDASARKAN TRANSAKSI)
+    //  GENERATE LAPORAN BARU (TANPA TOTAL LABA)
     // ======================================================
     public function generate(Request $request)
     {
@@ -51,25 +50,36 @@ class LaporanPenjualanController extends Controller
             return back()->with('error', 'Tidak ada transaksi di periode tersebut.');
         }
 
-        $totalPenjualan = $transaksi->sum('total_harga');
-        $totalLaba = $transaksi->sum('total_laba');
-        $totalTransaksi = $transaksi->count();
+        $totalPenjualan  = $transaksi->sum('total_harga');
+        $totalTransaksi  = $transaksi->count();
 
         // Format periode: "11-2025"
         $periode = $bulan . '-' . $tahun;
 
-        // Simpan ke tabel laporan
+        //  CEK APAKAH PERIODE SUDAH ADA
+        $existing = LaporanPenjualan::where('periode', $periode)->first();
+
+        if ($existing) {
+            //  UPDATE TANPA TOTAL LABA
+            $existing->update([
+                'total_penjualan' => $totalPenjualan,
+                'total_transaksi' => $totalTransaksi,
+                'dibuat_oleh'     => Auth::id()
+            ]);
+
+            return back()->with('success', 'Laporan periode tersebut sudah ada. Data berhasil diperbarui.');
+        }
+
+        // Jika belum ada, create baru
         LaporanPenjualan::create([
             'periode'          => $periode,
             'total_penjualan'  => $totalPenjualan,
             'total_transaksi'  => $totalTransaksi,
-            'total_laba'       => $totalLaba,
             'dibuat_oleh'      => Auth::id()
         ]);
 
         return back()->with('success', 'Laporan berhasil dibuat.');
     }
-
 
     // ======================================================
     //  EXPORT PDF LAPORAN
@@ -82,6 +92,6 @@ class LaporanPenjualanController extends Controller
             'laporan' => $laporan
         ])->setPaper('a4', 'portrait');
 
-        return $pdf->download('Laporan_Penjualan' . $laporan->periode . '.pdf');
+        return $pdf->download('Laporan_Penjualan_' . $laporan->periode . '.pdf');
     }
 }
