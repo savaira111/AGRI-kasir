@@ -120,6 +120,87 @@
         </div>
     </div>
 
+<!-- ICON PROFILE -->
+<div onclick="toggleProfileMenu()" style="cursor: pointer;">
+    <img src="/img/profile.png" width="40">
+</div>
+
+        <!-- DROPDOWN PROFILE -->
+        <div id="profileMenu" 
+            style="
+                display:none; 
+                position:absolute; 
+                right:20px; 
+                top:70px;
+                background:#8ccf8c;
+                padding:15px 20px;
+                border-radius:15px;
+                width:150px;
+                text-align:center;
+            ">
+            <div style="font-weight:600; margin-bottom:10px;">role</div>
+
+            <button onclick="openLogoutModal()" 
+                    class="btn btn-light w-100">
+                <i class="fa-solid fa-right-from-bracket"></i> Log Out
+            </button>
+        </div>
+        <script>
+        function toggleProfileMenu() {
+            let menu = document.getElementById('profileMenu');
+            menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+        }
+        </script>
+
+
+
+        <!-- LOGOUT MODAL -->
+        <div id="logoutModal" 
+            style="
+                display:none; 
+                position:fixed; 
+                top:0; left:0; 
+                width:100%; 
+                height:100%;
+                background:rgba(0,0,0,0.4);
+                justify-content:center;
+                align-items:center;
+            ">
+            
+            <div style="
+                background:white; 
+                padding:25px; 
+                border-radius:20px;
+                width:300px;
+                text-align:center;
+            ">
+                <h5>Apakah anda yakin akan Log out</h5>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <button class="btn btn-danger w-50 me-2"
+                            onclick="closeLogoutModal()">Tidak</button>
+
+                    <form action="{{ route('logout') }}" method="POST" class="w-50">
+                        @csrf
+                        <button class="btn btn-warning w-100">Ya</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script>
+        function openLogoutModal() {
+            document.getElementById('logoutModal').style.display = 'flex';
+        }
+
+        function closeLogoutModal() {
+            document.getElementById('logoutModal').style.display = 'none';
+        }
+        </script>
+
+
+
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         const sidebar = document.getElementById('sidebar');

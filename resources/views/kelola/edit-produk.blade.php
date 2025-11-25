@@ -40,6 +40,15 @@
                        value="{{ $produk->kode_produk }}" required>
             </div>
 
+             <!-- Tanggal Input Otomatis -->
+            <div class="mb-3">
+                <label for="tanggal_input" class="form-label fw-semibold">Tanggal input</label>
+                <input type="date" id="tanggal_input" name="tanggal_input" class="form-control"
+                       value="{{ $produk->tanggal_input ?? date('Y-m-d') }}" required>
+            </div>
+
+
+
             <!-- Nama Produk -->
             <div class="mb-3">
                 <label for="nama_produk" class="form-label fw-semibold">Nama produk</label>
@@ -107,24 +116,18 @@
                 <textarea id="deskripsi" name="deskripsi_produk" rows="2" class="form-control">{{ $produk->deskripsi_produk }}</textarea>
             </div>
 
-            <!-- Tanggal Input Otomatis -->
-            <div class="mb-3">
-                <label for="tanggal_input" class="form-label fw-semibold">Tanggal input</label>
-                <input type="date" id="tanggal_input" name="tanggal_input" class="form-control"
-                       value="{{ $produk->tanggal_input ?? date('Y-m-d') }}" required>
-            </div>
 
             <!-- Tanggal Kadaluarsa -->
             <div class="mb-3">
                 <label for="tanggal_kadaluarsa" class="form-label fw-semibold">Tanggal kadaluarsa</label>
-                <input type="date" id="tanggal_kadaluarsa" name="tanggal_kadaluarsa" class="form-control"
+                <input type="date" id="tanggal_kadaluarsa" name="tanggal_kadaluarsa" class="form-control" required
                        value="{{ $produk->tanggal_kadaluarsa }}">
             </div>
 
             <!-- Foto Produk -->
             <div class="mb-3">
                 <label for="foto_produk" class="form-label fw-semibold">Pilih foto produk</label>
-                <input type="file" id="foto_produk" name="foto_produk" class="form-control">
+                <input type="file" id="foto_produk" name="foto_produk" class="form-control"required>
                 @if ($produk->foto_produk)
                     <div class="mt-2 text-center">
                         <img src="{{ asset('storage/produk/' . $produk->foto_produk) }}" alt="Foto Produk" width="100" class="rounded shadow">
