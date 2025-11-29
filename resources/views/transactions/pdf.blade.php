@@ -49,9 +49,9 @@
 
     <!-- Info Transaksi -->
     <div class="d-flex mb-2">
-        <span>Kode transaksi: {{ $transaksi->id }}</span>
-        <span>{{ \Carbon\Carbon::parse($transaksi->tanggal_transaksi)->format('d-m-Y') }}</span>
+    <span>Tanggal transaksi: {{ \Carbon\Carbon::parse($transaksi->tanggal_transaksi)->format('d-m-Y') }}</span>
     </div>
+
 
     <div class="divider"></div>
 

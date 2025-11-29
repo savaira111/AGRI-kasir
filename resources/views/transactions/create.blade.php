@@ -13,7 +13,7 @@
 
         @if(session()->has("error"))
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <h5>{{session("error")}}</h5>
+            <h5>{{ session("error") }}</h5>
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
         @endif
@@ -49,7 +49,26 @@
                         <th width="70px">Aksi</th>
                     </tr>
                 </thead>
-                <tbody></tbody>
+                <tbody>
+                    {{-- Jika ada old input, tampilkan --}}
+                    @if(old('produk_id'))
+                        @foreach(old('produk_id') as $i => $pid)
+                            @php
+                                $p = $produk->firstWhere('id_produk', $pid);
+                                $jumlahOld = old('jumlah')[$i] ?? 1;
+                            @endphp
+                            @if($p)
+                            <tr id="row-{{ $p->id_produk }}">
+                                <td>{{ $p->nama_produk }}<input type="hidden" name="produk_id[]" value="{{ $p->id_produk }}"></td>
+                                <td><input type="number" name="jumlah[]" class="form-control jumlah" min="1" max="{{ $p->stok_produk }}" value="{{ $jumlahOld }}"></td>
+                                <td><input type="number" class="form-control harga" value="{{ $p->harga_jual }}" readonly></td>
+                                <td class="subtotal">{{ $p->harga_jual * $jumlahOld }}</td>
+                                <td><button type="button" class="btn btn-danger btn-sm" onclick="removeItem('{{ $p->id_produk }}')"><i class="bi bi-trash"></i></button></td>
+                            </tr>
+                            @endif
+                        @endforeach
+                    @endif
+                </tbody>
             </table>
 
             {{-- Total & Metode Bayar --}}
@@ -61,8 +80,8 @@
                 <div class="mb-3">
                     <label class="form-label">Metode Pembayaran</label>
                     <select name="metode_pembayaran" class="form-select" id="metodeBayar">
-                        <option value="cash">Cash</option>
-                        <option value="qris">Qris</option>
+                        <option value="cash" {{ old('metode_pembayaran') == 'cash' ? 'selected' : '' }}>Cash</option>
+                        <option value="qris" {{ old('metode_pembayaran') == 'qris' ? 'selected' : '' }}>Qris</option>
                     </select>
                 </div>
 
@@ -115,10 +134,8 @@ document.getElementById('searchProduct').addEventListener('keyup', function () {
             let item = document.createElement('a');
             item.classList.add('list-group-item');
 
-            // tampil nama + stok
             item.innerHTML = `${p.nama_produk} (Stok: ${p.stok_produk})`;
 
-            // klikable hanya kalau stok > 0
             if (p.stok_produk > 0) {
                 item.classList.add('list-group-item-action');
                 item.style.cursor = "pointer";
@@ -167,11 +184,12 @@ function removeItem(id) {
     updateTotal();
 }
 
-// UPDATE TOTAL
+// UPDATE TOTAL & CEK STOK
 document.addEventListener('input', function(e) {
     if (e.target.classList.contains('jumlah')) {
         let input = e.target;
         let max = parseInt(input.getAttribute('max')) || 0;
+        if (parseInt(input.value) < 1) input.value = 1;
         if (parseInt(input.value) > max) {
             input.value = max;
             let stokAlertModal = document.getElementById('stokAlertModal');

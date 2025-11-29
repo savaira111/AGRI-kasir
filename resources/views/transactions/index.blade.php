@@ -99,8 +99,7 @@
                         <td>{{ ucfirst($t->metode_pembayaran) }}</td>
                         <td>{{ $t->user->name ?? '-' }}</td>
                         <td>
-                            <a href="{{ route('transactions.show', $t->id) }}"
-                               class="btn btn-sm" style="background-color:#FCCD2A;">
+                            <a href="{{ route('transactions.show', $t->id) }}" class="btn btn-sm action-view">
                                 <i class="bi bi-eye-fill"></i>
                             </a>
                         </td>
@@ -171,6 +170,18 @@
         </div>
     </div>
 </div>
+
+<!-- Tombol View Style -->
+<style>
+.action-view {
+    background-color: #3498DB; /* biru */
+    color: white;
+    transition: 0.2s;
+}
+.action-view:hover {
+    background-color: #2980b9;
+}
+</style>
 
 <!-- JS: Dropdown Toggle + Logout Modal -->
 <script>

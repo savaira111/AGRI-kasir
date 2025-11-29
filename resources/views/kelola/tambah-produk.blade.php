@@ -34,19 +34,25 @@
             <!-- Nama Produk -->
             <div class="mb-3">
                 <label for="nama_produk" class="form-label fw-semibold">Nama Produk</label>
-                <input type="text" id="nama_produk" name="nama_produk" class="form-control" placeholder="Isi nama produk" required>
+                <input type="text" id="nama_produk" name="nama_produk" class="form-control"
+                       placeholder="Isi nama produk" required
+                       value="{{ old('nama_produk') }}">
             </div>
 
             <!-- Nama Pemasok -->
             <div class="mb-3">
                 <label for="nama_pemasok" class="form-label fw-semibold">Nama Pemasok</label>
-                <input type="text" id="nama_pemasok" name="nama_pemasok" class="form-control" placeholder="Isi nama pemasok" required>
+                <input type="text" id="nama_pemasok" name="nama_pemasok" class="form-control"
+                       placeholder="Isi nama pemasok" required
+                       value="{{ old('nama_pemasok') }}">
             </div>
 
             <!-- Kategori -->
             <div class="mb-3">
                 <label for="kategori_produk" class="form-label fw-semibold">Kategori</label>
-                <input type="text" id="kategori_produk" name="kategori_produk" class="form-control" placeholder="Isi kategori produk" required>
+                <input type="text" id="kategori_produk" name="kategori_produk" class="form-control"
+                       placeholder="Isi kategori produk" required
+                       value="{{ old('kategori_produk') }}">
             </div>
 
             <!-- Satuan -->
@@ -54,42 +60,58 @@
                 <label for="satuan_produk" class="form-label fw-semibold">Satuan</label>
                 <select id="satuan_produk" name="satuan_produk" class="form-select" required>
                     <option value="">-- Pilih Satuan --</option>
-                    <option value="Kg">Kg</option>
-                    <option value="Liter">Liter</option>
-                    <option value="Pcs">Pcs</option>
-                    <option value="Pack">Pack</option>
-                    <option value="Botol">Botol</option>
+                    <option value="Kg" {{ old('satuan_produk') == 'Kg' ? 'selected' : '' }}>Kg</option>
+                    <option value="Liter" {{ old('satuan_produk') == 'Liter' ? 'selected' : '' }}>Liter</option>
+                    <option value="Pcs" {{ old('satuan_produk') == 'Pcs' ? 'selected' : '' }}>Pcs</option>
+                    <option value="Pack" {{ old('satuan_produk') == 'Pack' ? 'selected' : '' }}>Pack</option>
+                    <option value="Botol" {{ old('satuan_produk') == 'Botol' ? 'selected' : '' }}>Botol</option>
                 </select>
             </div>
 
             <!-- Stok -->
             <div class="mb-3">
                 <label for="stok_produk" class="form-label fw-semibold">Stok</label>
-                <input type="number" id="stok_produk" name="stok_produk" class="form-control" placeholder="Isi stok produk" required>
+                <input type="number"
+                       id="stok_produk"
+                       name="stok_produk"
+                       class="form-control @error('stok_produk') is-invalid @enderror"
+                       placeholder="Isi stok produk"
+                       value="{{ old('stok_produk') }}"
+                       required>
+
+                @error('stok_produk')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
             </div>
 
             <!-- Harga Jual -->
             <div class="mb-3">
                 <label for="harga_jual" class="form-label fw-semibold">Harga Jual</label>
-                <input type="number" id="harga_jual" name="harga_jual" class="form-control" placeholder="Isi harga jual produk" required>
+                <input type="number" id="harga_jual" name="harga_jual" class="form-control"
+                       placeholder="Isi harga jual produk" required>
             </div>
 
             <!-- Harga Beli -->
             <div class="mb-3">
                 <label for="harga_beli" class="form-label fw-semibold">Harga Beli</label>
-                <input type="number" id="harga_beli" name="harga_beli" class="form-control" placeholder="Isi harga beli produk" required>
+                <input type="number" id="harga_beli" name="harga_beli" class="form-control"
+                       placeholder="Isi harga beli produk" required>
             </div>
 
             <!-- Deskripsi -->
             <div class="mb-3">
                 <label for="deskripsi_produk" class="form-label fw-semibold">Deskripsi</label>
-                <textarea id="deskripsi_produk" name="deskripsi_produk" rows="2" class="form-control" placeholder="Isi deskripsi produk"></textarea>
+                <textarea id="deskripsi_produk" name="deskripsi_produk" rows="2" class="form-control"
+                          placeholder="Isi deskripsi produk">{{ old('deskripsi_produk') }}</textarea>
             </div>
 
             <!-- Tanggal Kadaluarsa -->
             <div class="mb-3">
                 <label for="tanggal_kadaluarsa" class="form-label fw-semibold">Tanggal Kadaluarsa</label>
-                <input type="date" id="tanggal_kadaluarsa" name="tanggal_kadaluarsa" class="form-control" required>
+                <input type="date" id="tanggal_kadaluarsa" name="tanggal_kadaluarsa"
+                       class="form-control" required>
             </div>
 
             <!-- Foto Produk -->

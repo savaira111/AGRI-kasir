@@ -40,14 +40,12 @@
                        value="{{ $produk->kode_produk }}" required>
             </div>
 
-             <!-- Tanggal Input Otomatis -->
+            <!-- Tanggal Input Otomatis -->
             <div class="mb-3">
                 <label for="tanggal_input" class="form-label fw-semibold">Tanggal input</label>
                 <input type="date" id="tanggal_input" name="tanggal_input" class="form-control"
                        value="{{ $produk->tanggal_input ?? date('Y-m-d') }}" required>
             </div>
-
-
 
             <!-- Nama Produk -->
             <div class="mb-3">
@@ -63,7 +61,7 @@
                        value="{{ $produk->nama_pemasok }}" required>
             </div>
 
-            <!-- Kategori (Dropdown statis) -->
+            <!-- Kategori Dropdown -->
             <div class="mb-3">
                 <label for="kategori_produk_dropdown" class="form-label fw-semibold">Kategori produk</label>
                 <select id="kategori_produk_dropdown" name="kategori_produk" class="form-select" required>
@@ -76,14 +74,24 @@
                 </select>
             </div>
 
-            <!-- Stok -->
+            <!-- Stok (SUDAH DIBENERIN) -->
             <div class="mb-3">
                 <label for="stok_produk" class="form-label fw-semibold">Stok</label>
-                <input type="number" id="stok_produk" name="stok_produk" class="form-control"
-                       value="{{ $produk->stok_produk }}" required>
+                <input type="number"
+                       id="stok_produk"
+                       name="stok_produk"
+                       class="form-control @error('stok_produk') is-invalid @enderror"
+                       value="{{ old('stok_produk', $produk->stok_produk) }}"
+                       required>
+
+                @error('stok_produk')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
             </div>
 
-            <!-- Satuan (Dropdown statis) -->
+            <!-- Satuan -->
             <div class="mb-3">
                 <label for="satuan_produk_dropdown" class="form-label fw-semibold">Satuan</label>
                 <select id="satuan_produk_dropdown" name="satuan_produk" class="form-select" required>
@@ -116,7 +124,6 @@
                 <textarea id="deskripsi" name="deskripsi_produk" rows="2" class="form-control">{{ $produk->deskripsi_produk }}</textarea>
             </div>
 
-
             <!-- Tanggal Kadaluarsa -->
             <div class="mb-3">
                 <label for="tanggal_kadaluarsa" class="form-label fw-semibold">Tanggal kadaluarsa</label>
@@ -127,7 +134,8 @@
             <!-- Foto Produk -->
             <div class="mb-3">
                 <label for="foto_produk" class="form-label fw-semibold">Pilih foto produk</label>
-                <input type="file" id="foto_produk" name="foto_produk" class="form-control"required>
+                <input type="file" id="foto_produk" name="foto_produk" class="form-control" required>
+
                 @if ($produk->foto_produk)
                     <div class="mt-2 text-center">
                         <img src="{{ asset('storage/produk/' . $produk->foto_produk) }}" alt="Foto Produk" width="100" class="rounded shadow">

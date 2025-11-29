@@ -60,7 +60,7 @@ class LaporanPenjualanController extends Controller
         $existing = LaporanPenjualan::where('periode', $periode)->first();
 
         if ($existing) {
-            //  UPDATE TANPA TOTAL LABA
+            
             $existing->update([
                 'total_penjualan' => $totalPenjualan,
                 'total_transaksi' => $totalTransaksi,

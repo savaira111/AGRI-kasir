@@ -11,37 +11,33 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // Total Produk
+        // menghitung total produk yang di buat
         $totalProduk = Produk::count();
 
-        // Total Transaksi
+        // menghintung transaksi yang pernah dilakukan
         $totalTransaksi = Transaction::count();
 
-        // Total Pendapatan
+        // menjumlahkan semua total harga dari semua transaksi
         $totalPendapatan = Transaction::sum('total_harga');
 
-        // Total Laba / Keuntungan (sementara pakai total_harga)
-        // nanti bisa diganti kalau ada kolom harga_modal
-        $total_laba = $totalPendapatan;
 
         // Data revenue chart (6 bulan terakhir)
-        $revenue = [];
-        $labels = [];
-        for ($i = 5; $i >= 0; $i--) {
-            $month = now()->subMonths($i)->month;
-            $labels[] = now()->subMonths($i)->format('M');
+        $revenue = []; // 
+        $labels = []; // menyimpan nama bulan
+        for ($i = 5; $i >= 0; $i--) { // Perulangan untuk mengambil data dari 6 bulan terakhir
+            $month = now()->subMonths($i)->month; 
+            $labels[] = now()->subMonths($i)->format('M');  // ngambil nama bulan, misalnya "Jan", "Feb", "Mar"
 
             $monthly = Transaction::whereMonth('tanggal_transaksi', $month)
-                ->sum('total_harga');
+                ->sum('total_harga'); //memjumlahkan total pendapatan dari bulan tertentu
 
             $revenue[] = $monthly;
         }
 
-        return view('dashboard', compact(
+        return view('dashboard', compact( // mengirim data ke halaman dashboard
             'totalProduk', 
             'totalTransaksi', 
             'totalPendapatan', 
-            'total_laba', 
             'revenue', 
             'labels'
         ));

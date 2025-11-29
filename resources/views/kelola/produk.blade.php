@@ -95,25 +95,31 @@
                     <td>{{ $item->nama_pemasok ?? '-' }}</td>
                     <td>{{ $item->kategori_produk ?? '-' }}</td>
                     <td>
-                    <span class="{{ $item->stok_produk < 3 ? 'text-danger fw-bold' : '' }}">
-                        {{ $item->stok_produk > 0 ? $item->stok_produk : 0 }}
-                    </span>
-                </td>
+                        <span class="{{ $item->stok_produk < 3 ? 'text-danger fw-bold' : '' }}">
+                            {{ $item->stok_produk > 0 ? $item->stok_produk : 0 }}
+                        </span>
+                    </td>
 
                     <td class="text-center align-middle" style="white-space: nowrap;">
                         <div class="d-flex justify-content-center gap-2">
-                            <a href="{{ route('produk.edit', $item->id_produk) }}" class="btn btn-sm" style="background-color: #FCCD2A;">
+                            <!-- Edit -->
+                            <a href="{{ route('produk.edit', $item->id_produk) }}" 
+                               class="btn btn-sm action-edit">
                                 <i class="bi bi-pencil-fill"></i>
                             </a>
+
+                            <!-- Hapus -->
                             <form action="{{ route('produk.destroy', $item->id_produk) }}" method="POST" onsubmit="return confirm('Yakin mau hapus produk ini? 🌿')" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-sm" style="background-color: #FCCD2A;">
+                                <button type="submit" class="btn btn-sm action-delete">
                                     <i class="bi bi-trash3-fill"></i>
                                 </button>
                             </form>
+
+                            <!-- Lihat / Detail -->
                             <a href="/produk/{{ $item->id_produk }}">
-                                <button type="button" class="btn btn-sm" style="background-color: #FCCD2A;">
+                                <button type="button" class="btn btn-sm action-view">
                                     <i class="bi bi-eye-fill"></i>
                                 </button>
                             </a>
@@ -181,6 +187,36 @@
         </div>
     </div>
 </div>
+
+<style>
+/* Tombol aksi sesuai warna */
+.action-edit {
+    background-color: #F1C40F; /* kuning */
+    color: black;
+    transition: 0.2s;
+}
+.action-edit:hover {
+    background-color: #d4b30f;
+}
+
+.action-delete {
+    background-color: #E74C3C; /* merah */
+    color: white;
+    transition: 0.2s;
+}
+.action-delete:hover {
+    background-color: #c0392b;
+}
+
+.action-view {
+    background-color: #3498DB; /* biru */
+    color: white;
+    transition: 0.2s;
+}
+.action-view:hover {
+    background-color: #2980b9;
+}
+</style>
 
 <script>
 function toggleProfileMenu() {
