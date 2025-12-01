@@ -23,7 +23,6 @@ class LaporanPenjualan extends Model
         'tanggal_laporan',
         'total_penjualan',
         'total_transaksi',
-        'total_laba',
     ];
 
     // Relasi ke tabel Transaksi

@@ -104,19 +104,43 @@
                 </select>
             </div>
 
-            <!-- Harga Jual -->
+         
+                    <!-- Harga Jual -->
             <div class="mb-3">
                 <label for="harga_jual" class="form-label fw-semibold">Harga jual</label>
-                <input type="number" id="harga_jual" name="harga_jual" class="form-control"
-                       value="{{ $produk->harga_jual }}" required>
+                <input type="number"
+                    id="harga_jual"
+                    name="harga_jual"
+                    class="form-control @error('harga_jual') is-invalid @enderror"
+                    value="{{ old('harga_jual', $produk->harga_jual) }}"
+                    required>
+
+                @error('harga_jual')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
             </div>
 
-            <!-- Harga Beli -->
-            <div class="mb-3">
-                <label for="harga_beli" class="form-label fw-semibold">Harga beli</label>
-                <input type="number" id="harga_beli" name="harga_beli" class="form-control"
-                       value="{{ $produk->harga_beli }}" required>
-            </div>
+
+           
+           <!-- Harga Beli -->
+                <div class="mb-3">
+                    <label for="harga_beli" class="form-label fw-semibold">Harga beli</label>
+                    <input type="number"
+                        id="harga_beli"
+                        name="harga_beli"
+                        class="form-control @error('harga_beli') is-invalid @enderror"
+                        value="{{ old('harga_beli', $produk->harga_beli) }}"
+                        required>
+
+                    @error('harga_beli')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
+
 
             <!-- Deskripsi -->
             <div class="mb-3">

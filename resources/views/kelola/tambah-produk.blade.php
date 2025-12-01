@@ -31,93 +31,124 @@
                 <input type="text" id="kode_produk" name="kode_produk" class="form-control" value="{{ $kodeOtomatis }}" readonly>
             </div>
 
+            <!-- Tanggal Input Otomatis -->
+            <div class="mb-3">
+                <label for="tanggal_input" class="form-label fw-semibold">Tanggal Input</label>
+                <input type="date" id="tanggal_input" name="tanggal_input" class="form-control"
+                       value="{{ old('tanggal_input', date('Y-m-d')) }}" required>
+            </div>
+
             <!-- Nama Produk -->
             <div class="mb-3">
                 <label for="nama_produk" class="form-label fw-semibold">Nama Produk</label>
-                <input type="text" id="nama_produk" name="nama_produk" class="form-control"
-                       placeholder="Isi nama produk" required
-                       value="{{ old('nama_produk') }}">
+                <input type="text" id="nama_produk" name="nama_produk"
+                       class="form-control @error('nama_produk') is-invalid @enderror"
+                       placeholder="Isi nama produk" value="{{ old('nama_produk') }}" required>
+                @error('nama_produk')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
 
             <!-- Nama Pemasok -->
             <div class="mb-3">
                 <label for="nama_pemasok" class="form-label fw-semibold">Nama Pemasok</label>
-                <input type="text" id="nama_pemasok" name="nama_pemasok" class="form-control"
-                       placeholder="Isi nama pemasok" required
-                       value="{{ old('nama_pemasok') }}">
+                <input type="text" id="nama_pemasok" name="nama_pemasok"
+                       class="form-control @error('nama_pemasok') is-invalid @enderror"
+                       placeholder="Isi nama pemasok" value="{{ old('nama_pemasok') }}" required>
+                @error('nama_pemasok')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
 
-            <!-- Kategori -->
+            <!-- Kategori Dropdown -->
             <div class="mb-3">
-                <label for="kategori_produk" class="form-label fw-semibold">Kategori</label>
-                <input type="text" id="kategori_produk" name="kategori_produk" class="form-control"
-                       placeholder="Isi kategori produk" required
-                       value="{{ old('kategori_produk') }}">
+                <label for="kategori_produk_dropdown" class="form-label fw-semibold">Kategori Produk</label>
+                <select id="kategori_produk_dropdown" name="kategori_produk" class="form-select" required>
+                    @php
+                        $kategoriList = ['Pupuk', 'Bibit', 'Alat Pertanian', 'Obat', 'Lainnya'];
+                    @endphp
+                    @foreach($kategoriList as $k)
+                        <option value="{{ $k }}" {{ old('kategori_produk') == $k ? 'selected' : '' }}>{{ $k }}</option>
+                    @endforeach
+                </select>
             </div>
 
             <!-- Satuan -->
             <div class="mb-3">
-                <label for="satuan_produk" class="form-label fw-semibold">Satuan</label>
-                <select id="satuan_produk" name="satuan_produk" class="form-select" required>
-                    <option value="">-- Pilih Satuan --</option>
-                    <option value="Kg" {{ old('satuan_produk') == 'Kg' ? 'selected' : '' }}>Kg</option>
-                    <option value="Liter" {{ old('satuan_produk') == 'Liter' ? 'selected' : '' }}>Liter</option>
-                    <option value="Pcs" {{ old('satuan_produk') == 'Pcs' ? 'selected' : '' }}>Pcs</option>
-                    <option value="Pack" {{ old('satuan_produk') == 'Pack' ? 'selected' : '' }}>Pack</option>
-                    <option value="Botol" {{ old('satuan_produk') == 'Botol' ? 'selected' : '' }}>Botol</option>
+                <label for="satuan_produk_dropdown" class="form-label fw-semibold">Satuan</label>
+                <select id="satuan_produk_dropdown" name="satuan_produk" class="form-select" required>
+                    @php
+                        $satuanList = ['Kg', 'Liter', 'Pcs', 'Pack', 'Botol'];
+                    @endphp
+                    @foreach($satuanList as $s)
+                        <option value="{{ $s }}" {{ old('satuan_produk') == $s ? 'selected' : '' }}>{{ $s }}</option>
+                    @endforeach
                 </select>
             </div>
 
             <!-- Stok -->
             <div class="mb-3">
                 <label for="stok_produk" class="form-label fw-semibold">Stok</label>
-                <input type="number"
-                       id="stok_produk"
-                       name="stok_produk"
+                <input type="number" id="stok_produk" name="stok_produk"
                        class="form-control @error('stok_produk') is-invalid @enderror"
-                       placeholder="Isi stok produk"
-                       value="{{ old('stok_produk') }}"
-                       required>
-
+                       placeholder="Isi stok produk" value="{{ old('stok_produk') }}" min="0" required>
                 @error('stok_produk')
-                    <div class="invalid-feedback">
-                        {{ $message }}
-                    </div>
+                    <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
 
             <!-- Harga Jual -->
             <div class="mb-3">
                 <label for="harga_jual" class="form-label fw-semibold">Harga Jual</label>
-                <input type="number" id="harga_jual" name="harga_jual" class="form-control"
-                       placeholder="Isi harga jual produk" required>
+                <input type="number" id="harga_jual" name="harga_jual"
+                       class="form-control @error('harga_jual') is-invalid @enderror"
+                       placeholder="Isi harga jual produk" value="{{ old('harga_jual') }}" min="0" required>
+                @error('harga_jual')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
 
             <!-- Harga Beli -->
             <div class="mb-3">
                 <label for="harga_beli" class="form-label fw-semibold">Harga Beli</label>
-                <input type="number" id="harga_beli" name="harga_beli" class="form-control"
-                       placeholder="Isi harga beli produk" required>
+                <input type="number" id="harga_beli" name="harga_beli"
+                       class="form-control @error('harga_beli') is-invalid @enderror"
+                       placeholder="Isi harga beli produk" value="{{ old('harga_beli') }}" min="0" required>
+                @error('harga_beli')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
 
             <!-- Deskripsi -->
             <div class="mb-3">
                 <label for="deskripsi_produk" class="form-label fw-semibold">Deskripsi</label>
-                <textarea id="deskripsi_produk" name="deskripsi_produk" rows="2" class="form-control"
+                <textarea id="deskripsi_produk" name="deskripsi_produk" rows="2"
+                          class="form-control @error('deskripsi_produk') is-invalid @enderror"
                           placeholder="Isi deskripsi produk">{{ old('deskripsi_produk') }}</textarea>
+                @error('deskripsi_produk')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
 
             <!-- Tanggal Kadaluarsa -->
             <div class="mb-3">
                 <label for="tanggal_kadaluarsa" class="form-label fw-semibold">Tanggal Kadaluarsa</label>
                 <input type="date" id="tanggal_kadaluarsa" name="tanggal_kadaluarsa"
-                       class="form-control" required>
+                       class="form-control @error('tanggal_kadaluarsa') is-invalid @enderror"
+                       value="{{ old('tanggal_kadaluarsa') }}" required>
+                @error('tanggal_kadaluarsa')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
 
             <!-- Foto Produk -->
             <div class="mb-3">
                 <label for="foto_produk" class="form-label fw-semibold">Pilih Foto Produk</label>
-                <input type="file" id="foto_produk" name="foto_produk" class="form-control" required>
+                <input type="file" id="foto_produk" name="foto_produk"
+                       class="form-control @error('foto_produk') is-invalid @enderror">
+                @error('foto_produk')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="d-flex justify-content-end">

@@ -13,7 +13,6 @@ return new class extends Migration
             $table->string('periode'); 
             $table->decimal('total_penjualan', 10, 2); 
             $table->integer('total_transaksi'); 
-             $table->decimal('total_laba',10,2); 
             $table->unsignedBigInteger('dibuat_oleh')->nullable(); 
             $table->timestamps();
 

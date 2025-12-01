@@ -43,23 +43,27 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($laporan as $index => $row)
+
+                    @if ($laporan)
                         <tr>
-                            <td class="text-center">{{ $index + 1 }}</td>
-                            <td class="text-center">{{ $row->periode }}</td>
-                            <td>Rp {{ number_format($row->total_penjualan, 0, ',', '.') }}</td>
-                            <td class="text-center">{{ $row->total_transaksi }}</td>
+                            <td class="text-center">1</td>
+                            <td class="text-center">{{ $laporan->periode }}</td>
+                            <td>Rp {{ number_format($laporan->total_penjualan, 0, ',', '.') }}</td>
+                            <td class="text-center">{{ $laporan->total_transaksi }}</td>
                             <td class="text-center">
-                                <a href="{{ route('laporan.exportPdf', $row->id_laporan) }}" class="btn btn-danger btn-sm rounded-pill">
+                                <a href="{{ route('laporan.exportPdf', $laporan->id_laporan) }}" class="btn btn-danger btn-sm rounded-pill">
                                     Export PDF
                                 </a>
                             </td>
                         </tr>
-                    @empty
+                    @else
                         <tr>
-                            <td colspan="5" class="text-center py-4 text-danger">Belum ada laporan untuk periode ini.</td>
+                            <td colspan="5" class="text-center py-4 text-danger">
+                                Belum ada laporan untuk periode ini.
+                            </td>
                         </tr>
-                    @endforelse
+                    @endif
+
                 </tbody>
             </table>
 
@@ -69,14 +73,18 @@
     {{-- RINGKASAN --}}
     <div class="card shadow-sm mb-4" style="background:#D4EDC9;">
         <div class="card-body">
+
             <h5 class="fw-bold">Total penjualan periode ini :</h5>
             <p class="fs-5">
                 Rp 
-                {{ number_format($laporan->sum('total_penjualan'), 0, ',', '.') }}
+                {{ $laporan ? number_format($laporan->total_penjualan, 0, ',', '.') : '0' }}
             </p>
 
             <h5 class="fw-bold mt-3">Total transaksi :</h5>
-            <p class="fs-5">{{ $laporan->sum('total_transaksi') }} transaksi</p>
+            <p class="fs-5">
+                {{ $laporan ? $laporan->total_transaksi : 0 }} transaksi
+            </p>
+
         </div>
     </div>
 

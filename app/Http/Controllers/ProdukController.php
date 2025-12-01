@@ -126,43 +126,41 @@ class ProdukController extends Controller
         return view('kelola.edit-produk', compact('produk', 'kodeOtomatis', 'satuan', 'tanggalHariIni'));
     }
 
-    // 🌿 Update produk
+    // 🌿 UPDATE PRODUK (SUDAH FIX SESUAI PERMINTAAN)
     public function update(Request $request, $id)
     {
+        // ⭐ Validasi fix
         $request->validate([
-            'kode_produk' => 'nullable|string|max:100',
-            'nama_produk' => 'required|string|max:255',
-            'nama_pemasok' => 'nullable|string|max:255',
-            'stok_produk' => 'required|integer|min:0',
-            'stok_tambah' => 'nullable|integer|min:0',
-            'harga_jual' => 'nullable|numeric|min:0',
-            'harga_beli' => 'nullable|numeric|min:0',
-            'kategori_produk' => 'nullable|string|max:100',
-            'satuan_produk' => 'nullable|string|max:50',
-            'foto_produk' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'deskripsi_produk' => 'nullable|string',
-            'tanggal_input' => 'nullable|date',
-            'tanggal_kadaluarsa' => 'nullable|date|after_or_equal:tanggal_input',
-        ], [
-            'stok_tambah.min' => 'Penambahan stok tidak boleh minus!',
-            'stok_produk.min' => 'Stok tidak boleh minus!'
+            'kode_produk'         => 'required',
+            'tanggal_input'       => 'required|date',
+            'nama_produk'         => 'required',
+            'nama_pemasok'        => 'required',
+            'kategori_produk'     => 'required',
+            'stok_produk'         => 'required|integer|min:0',
+            'satuan_produk'       => 'required',
+            'harga_jual'          => 'required|integer|min:0',
+            'harga_beli'          => 'required|integer|min:0',
+            'deskripsi_produk'    => 'nullable',
+            'tanggal_kadaluarsa'  => 'required|date',
+            'foto_produk'         => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $produk = Produk::findOrFail($id);
 
-        // 🔥 Tambah stok bukan timpa stok
-        $stokLama = $produk->stok_produk;
-        $stokTambah = $request->stok_tambah ?? 0;
-        $stokBaru = $stokLama + $stokTambah;
+        // Update data biasa
+        $produk->kode_produk        = $request->kode_produk;
+        $produk->tanggal_input      = $request->tanggal_input;
+        $produk->nama_produk        = $request->nama_produk;
+        $produk->nama_pemasok       = $request->nama_pemasok;
+        $produk->kategori_produk    = $request->kategori_produk;
+        $produk->stok_produk        = $request->stok_produk;
+        $produk->satuan_produk      = $request->satuan_produk;
+        $produk->harga_jual         = $request->harga_jual;
+        $produk->harga_beli         = $request->harga_beli;
+        $produk->deskripsi_produk   = $request->deskripsi_produk;
+        $produk->tanggal_kadaluarsa = $request->tanggal_kadaluarsa;
 
-        // Tidak boleh minus
-        if ($stokTambah < 0) {
-            return back()->withErrors([
-                'stok_tambah' => 'Penambahan stok tidak boleh minus!'
-            ])->withInput();
-        }
-
-        // Upload foto baru
+        // Update foto produk
         if ($request->hasFile('foto_produk')) {
 
             if ($produk->foto_produk && Storage::disk('public')->exists($produk->foto_produk)) {
@@ -174,18 +172,6 @@ class ProdukController extends Controller
             $file->storeAs('produk', $namaFile, 'public');
             $produk->foto_produk = 'produk/'.$namaFile;
         }
-
-        $produk->kode_produk = $request->kode_produk;
-        $produk->nama_produk = $request->nama_produk;
-        $produk->nama_pemasok = $request->nama_pemasok;
-        $produk->stok_produk = $stokBaru;
-        $produk->harga_jual = $request->harga_jual;
-        $produk->harga_beli = $request->harga_beli;
-        $produk->kategori_produk = $request->kategori_produk;
-        $produk->satuan_produk = $request->satuan_produk;
-        $produk->deskripsi_produk = $request->deskripsi_produk;
-        $produk->tanggal_input = $request->tanggal_input;
-        $produk->tanggal_kadaluarsa = $request->tanggal_kadaluarsa;
 
         $produk->save();
 

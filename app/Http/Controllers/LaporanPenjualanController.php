@@ -19,11 +19,17 @@ class LaporanPenjualanController extends Controller
 
         $query = LaporanPenjualan::with('pembuat');
 
+        // Kalau user pilih periode tertentu → ambil 1 data periode itu
         if ($periode) {
-            $query->where('periode', $periode);
+            $laporan = $query->where('periode', $periode)
+                            ->orderBy('created_at', 'DESC')
+                            ->first(); // << ambil satu
+        } 
+        else {
+            // Kalau tidak filter, ambil laporan terbaru saja
+            $laporan = LaporanPenjualan::orderBy('created_at', 'DESC')
+                                    ->first(); // << ambil satu
         }
-
-        $laporan = $query->orderBy('created_at', 'DESC')->get();
 
         return view('laporan.index', compact('laporan', 'periode'));
     }
@@ -88,8 +94,18 @@ class LaporanPenjualanController extends Controller
     {
         $laporan = LaporanPenjualan::findOrFail($id);
 
+        // Ambil bulan & tahun dari laporan → format: "11-2025"
+        [$bulan, $tahun] = explode('-', $laporan->periode);
+
+        // Ambil semua transaksi sesuai bulan & tahun
+        $transaksi = Transaction::whereMonth('tanggal_transaksi', $bulan)
+                                ->whereYear('tanggal_transaksi', $tahun)
+                                ->get();
+
+        // Load ke PDF
         $pdf = PDF::loadView('laporan.pdf', [
-            'laporan' => $laporan
+            'laporan'    => $laporan,
+            'transaksi'  => $transaksi
         ])->setPaper('a4', 'portrait');
 
         return $pdf->download('Laporan_Penjualan_' . $laporan->periode . '.pdf');
