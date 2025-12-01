@@ -12,12 +12,18 @@ use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {
-    // 🌿 Tampilkan daftar transaksi + search
+    // 🌿 Tampilkan daftar transaksi + search (hanya bulan ini)
     public function index(Request $request)
     {
         $search = $request->input('search');
 
+        // Ambil bulan & tahun sekarang
+        $currentMonth = date('m');
+        $currentYear  = date('Y');
+
         $query = Transaction::with('user')
+            ->whereMonth('tanggal_transaksi', $currentMonth)
+            ->whereYear('tanggal_transaksi', $currentYear)
             ->orderBy('tanggal_transaksi', 'desc')
             ->orderBy('id', 'desc');
 
@@ -94,24 +100,18 @@ class TransactionController extends Controller
                 $jumlah = (int)$request->jumlah[$i];
                 $produk = Produk::findOrFail($id_produk);
 
-                // ❗❗ VALIDASI BARU DISINI (TIDAK MENGUBAH BAGIAN LAIN)
-                // ------------------------------------------------------------------
-
-                // ❌ Tidak boleh minus atau 0
+                // ❗❗ VALIDASI BARU (tidak ubah bagian lain)
                 if ($jumlah < 1) {
                     return back()
                         ->withInput()
                         ->with('error', 'Jumlah produk tidak boleh kurang dari 1!');
                 }
 
-                // ❌ Tidak boleh lebih dari stok
                 if ($produk->stok_produk < $jumlah) {
                     return back()
                         ->withInput()
                         ->with('error', 'Stok produk "' . $produk->nama_produk . '" tidak cukup!');
                 }
-
-                // ------------------------------------------------------------------
 
                 $subtotal = $jumlah * $produk->harga_jual;
 
@@ -123,7 +123,7 @@ class TransactionController extends Controller
                 ]);
 
                 // Kurangi stok aman
-                $produk->stok_produk = $produk->stok_produk - $jumlah;
+                $produk->stok_produk -= $jumlah;
                 $produk->save();
             }
 

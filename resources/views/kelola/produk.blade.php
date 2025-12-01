@@ -67,10 +67,16 @@
 <div class="d-flex justify-content-end mb-3">
     <a href="{{ route('produk.create') }}" 
        class="btn btn-warning fw-bold d-flex align-items-center"
-       style="color: #000000; font-family: 'Rubik', sans-serif; border-radius: 12px;">
-        <i class="bi bi-plus-circle me-1"></i> Tambah
+       style="color: #000000; 
+              font-family: 'Rubik', sans-serif; 
+              border-radius: 12px; 
+              padding: 4px 10px; 
+              font-size: 0.875rem;">
+        <i class="bi bi-plus-circle me-1" style="font-size: 1rem;"></i> Tambah
     </a>
 </div>
+
+
 
 <!-- 🧾 Tabel Produk -->
 <div class="mt-4 bg-light p-3 rounded shadow-sm">

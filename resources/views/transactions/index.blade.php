@@ -69,10 +69,11 @@
     <!-- Judul Halaman -->
     <h3 class="mb-4">Daftar Transaksi</h3>
 
-    <!-- Tombol Tambah -->
-    <a href="{{ route('transactions.create') }}" class="btn btn-warning mb-3">
-        <i class="bi bi-plus-circle me-1"></i> Tambah
-    </a>
+   <!-- Tombol Tambah -->
+<a href="{{ route('transactions.create') }}" class="btn btn-warning mb-3 fw-bold">
+    <i class="bi bi-plus-circle me-1"></i> Tambah
+</a>
+
 
     <!-- Card Tabel -->
     <div class="card shadow-sm">

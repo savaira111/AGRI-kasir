@@ -37,12 +37,7 @@ class ProdukController extends Controller
                         ->orderBy('kode_produk', 'desc')
                         ->first();
 
-        if ($lastProduct) {
-            $lastNumber = intval(substr($lastProduct->kode_produk, -3));
-            $nextNumber = $lastNumber + 1;
-        } else {
-            $nextNumber = 1;
-        }
+        $nextNumber = $lastProduct ? intval(substr($lastProduct->kode_produk, -3)) + 1 : 1;
 
         $kodeOtomatis = $prefix . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
 
@@ -60,16 +55,14 @@ class ProdukController extends Controller
             'nama_produk' => 'required|string|max:255',
             'nama_pemasok' => 'nullable|string|max:255',
             'stok_produk' => 'required|integer|min:0',
-            'harga_jual' => 'nullable|numeric|min:0',
-            'harga_beli' => 'nullable|numeric|min:0',
+            'harga_jual' => 'nullable|numeric|min:0',  // decimal support
+            'harga_beli' => 'nullable|numeric|min:0',  // decimal support
             'kategori_produk' => 'nullable|string|max:100',
             'satuan_produk' => 'nullable|string|max:50',
             'foto_produk' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'deskripsi_produk' => 'nullable|string',
             'tanggal_input' => 'nullable|date',
             'tanggal_kadaluarsa' => 'nullable|date|after_or_equal:tanggal_input',
-        ], [
-            'stok_produk.min' => 'Stok tidak boleh minus!'
         ]);
 
         $produk = new Produk();
@@ -111,12 +104,7 @@ class ProdukController extends Controller
                         ->orderBy('kode_produk', 'desc')
                         ->first();
 
-        if ($lastProduct) {
-            $lastNumber = intval(substr($lastProduct->kode_produk, -3));
-            $nextNumber = $lastNumber + 1;
-        } else {
-            $nextNumber = 1;
-        }
+        $nextNumber = $lastProduct ? intval(substr($lastProduct->kode_produk, -3)) + 1 : 1;
 
         $kodeOtomatis = $prefix . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
 
@@ -126,28 +114,26 @@ class ProdukController extends Controller
         return view('kelola.edit-produk', compact('produk', 'kodeOtomatis', 'satuan', 'tanggalHariIni'));
     }
 
-    // 🌿 UPDATE PRODUK (SUDAH FIX SESUAI PERMINTAAN)
+    // 🌿 UPDATE PRODUK
     public function update(Request $request, $id)
     {
-        // ⭐ Validasi fix
         $request->validate([
-            'kode_produk'         => 'required',
+            'kode_produk'         => 'required|string|max:100',
             'tanggal_input'       => 'required|date',
-            'nama_produk'         => 'required',
-            'nama_pemasok'        => 'required',
-            'kategori_produk'     => 'required',
+            'nama_produk'         => 'required|string|max:255',
+            'nama_pemasok'        => 'required|string|max:255',
+            'kategori_produk'     => 'required|string|max:100',
             'stok_produk'         => 'required|integer|min:0',
-            'satuan_produk'       => 'required',
-            'harga_jual'          => 'required|integer|min:0',
-            'harga_beli'          => 'required|integer|min:0',
-            'deskripsi_produk'    => 'nullable',
-            'tanggal_kadaluarsa'  => 'required|date',
+            'satuan_produk'       => 'required|string|max:50',
+            'harga_jual'          => 'required|numeric|min:0',  // decimal support
+            'harga_beli'          => 'required|numeric|min:0',  // decimal support
+            'deskripsi_produk'    => 'nullable|string',
+            'tanggal_kadaluarsa'  => 'required|date|after_or_equal:tanggal_input',
             'foto_produk'         => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $produk = Produk::findOrFail($id);
 
-        // Update data biasa
         $produk->kode_produk        = $request->kode_produk;
         $produk->tanggal_input      = $request->tanggal_input;
         $produk->nama_produk        = $request->nama_produk;
@@ -160,13 +146,11 @@ class ProdukController extends Controller
         $produk->deskripsi_produk   = $request->deskripsi_produk;
         $produk->tanggal_kadaluarsa = $request->tanggal_kadaluarsa;
 
-        // Update foto produk
+        // Foto tetap bisa update
         if ($request->hasFile('foto_produk')) {
-
             if ($produk->foto_produk && Storage::disk('public')->exists($produk->foto_produk)) {
                 Storage::disk('public')->delete($produk->foto_produk);
             }
-
             $file = $request->file('foto_produk');
             $namaFile = time().'_'.preg_replace('/\s+/', '_', $file->getClientOriginalName());
             $file->storeAs('produk', $namaFile, 'public');

@@ -11,43 +11,34 @@ use PDF;
 class LaporanPenjualanController extends Controller
 {
     // ======================================================
-    //  TAMPILKAN LIST LAPORAN + FILTER PERIODE
+    //  TAMPILKAN LIST LAPORAN + RINGKASAN PERIODE TERAKHIR
     // ======================================================
     public function index(Request $request)
     {
-        $periode = $request->periode;
-
-        $query = LaporanPenjualan::with('pembuat');
-
-        // Kalau user pilih periode tertentu → ambil 1 data periode itu
-        if ($periode) {
-            $laporan = $query->where('periode', $periode)
+        // Ambil semua laporan, urut dari terbaru
+        $laporanList = LaporanPenjualan::with('pembuat')
                             ->orderBy('created_at', 'DESC')
-                            ->first(); // << ambil satu
-        } 
-        else {
-            // Kalau tidak filter, ambil laporan terbaru saja
-            $laporan = LaporanPenjualan::orderBy('created_at', 'DESC')
-                                    ->first(); // << ambil satu
-        }
+                            ->get();
 
-        return view('laporan.index', compact('laporan', 'periode'));
+        // Ambil laporan terakhir (periode terbaru) untuk ringkasan
+        $laporanTerakhir = $laporanList->first();
+
+        return view('laporan.index', compact('laporanList', 'laporanTerakhir'));
     }
 
     // ======================================================
-    //  GENERATE LAPORAN BARU (TANPA TOTAL LABA)
+    //  GENERATE LAPORAN BARU
     // ======================================================
     public function generate(Request $request)
     {
         $request->validate([
-            'bulan' => 'required',
-            'tahun' => 'required'
+            'bulan' => 'required|integer|min:1|max:12',
+            'tahun' => 'required|integer|min:2000'
         ]);
 
         $bulan = $request->bulan;
         $tahun = $request->tahun;
 
-        // Ambil transaksi berdasarkan bulan & tahun
         $transaksi = Transaction::whereMonth('tanggal_transaksi', $bulan)
                                 ->whereYear('tanggal_transaksi', $tahun)
                                 ->get();
@@ -56,32 +47,28 @@ class LaporanPenjualanController extends Controller
             return back()->with('error', 'Tidak ada transaksi di periode tersebut.');
         }
 
-        $totalPenjualan  = $transaksi->sum('total_harga');
-        $totalTransaksi  = $transaksi->count();
+        $totalPenjualan = $transaksi->sum('total_harga');
+        $totalTransaksi = $transaksi->count();
 
-        // Format periode: "11-2025"
         $periode = $bulan . '-' . $tahun;
 
-        //  CEK APAKAH PERIODE SUDAH ADA
         $existing = LaporanPenjualan::where('periode', $periode)->first();
 
         if ($existing) {
-            
             $existing->update([
                 'total_penjualan' => $totalPenjualan,
                 'total_transaksi' => $totalTransaksi,
-                'dibuat_oleh'     => Auth::id()
+                'dibuat_oleh'    => Auth::id()
             ]);
 
             return back()->with('success', 'Laporan periode tersebut sudah ada. Data berhasil diperbarui.');
         }
 
-        // Jika belum ada, create baru
         LaporanPenjualan::create([
-            'periode'          => $periode,
-            'total_penjualan'  => $totalPenjualan,
-            'total_transaksi'  => $totalTransaksi,
-            'dibuat_oleh'      => Auth::id()
+            'periode'         => $periode,
+            'total_penjualan' => $totalPenjualan,
+            'total_transaksi' => $totalTransaksi,
+            'dibuat_oleh'     => Auth::id()
         ]);
 
         return back()->with('success', 'Laporan berhasil dibuat.');
@@ -94,18 +81,15 @@ class LaporanPenjualanController extends Controller
     {
         $laporan = LaporanPenjualan::findOrFail($id);
 
-        // Ambil bulan & tahun dari laporan → format: "11-2025"
         [$bulan, $tahun] = explode('-', $laporan->periode);
 
-        // Ambil semua transaksi sesuai bulan & tahun
         $transaksi = Transaction::whereMonth('tanggal_transaksi', $bulan)
                                 ->whereYear('tanggal_transaksi', $tahun)
                                 ->get();
 
-        // Load ke PDF
         $pdf = PDF::loadView('laporan.pdf', [
-            'laporan'    => $laporan,
-            'transaksi'  => $transaksi
+            'laporan'   => $laporan,
+            'transaksi' => $transaksi
         ])->setPaper('a4', 'portrait');
 
         return $pdf->download('Laporan_Penjualan_' . $laporan->periode . '.pdf');

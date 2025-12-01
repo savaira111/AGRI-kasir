@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('nama_produk'); 
             $table->string('nama_pemasok')->nullable();
             $table->integer('stok_produk')->default(0); 
-            $table->decimal('harga_jual', 10, 2)->nullable(); 
-            $table->decimal('harga_beli', 10, 2)->nullable(); 
+            $table->decimal('harga_jual', 15, 2)->nullable()->change; 
+            $table->decimal('harga_beli', 15, 2)->nullable()->change; 
             $table->string('kategori_produk')->nullable(); 
             $table->string('satuan_produk')->nullable(); 
             $table->string('foto_produk')->nullable(); 
