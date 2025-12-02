@@ -41,9 +41,10 @@ class ProdukController extends Controller
 
         $kodeOtomatis = $prefix . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
 
+        $satuan = ['Kg', 'Liter', 'Pcs', 'Pack', 'Botol'];
         $tanggalHariIni = date('d-m-Y');
 
-        return view('kelola.tambah-produk', compact('kodeOtomatis', 'tanggalHariIni'));
+        return view('kelola.tambah-produk', compact('kodeOtomatis', 'satuan', 'tanggalHariIni'));
     }
 
     // 🌿 Simpan produk baru
@@ -56,8 +57,8 @@ class ProdukController extends Controller
             'stok_produk' => 'required|integer|min:0',
             'harga_jual' => 'nullable|numeric|min:0',
             'harga_beli' => 'nullable|numeric|min:0',
-            'kategori_produk' => 'nullable|string|max:100',
-            'satuan_produk' => 'nullable|string|max:50',
+            'kategori_produk' => 'nullable|string|max:100', // input teks
+            'satuan_produk' => 'nullable|string|max:50',    // dropdown tetap string
             'foto_produk' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'deskripsi_produk' => 'nullable|string',
             'tanggal_input' => 'nullable|date',
@@ -94,12 +95,26 @@ class ProdukController extends Controller
     public function edit($id)
     {
         $produk = Produk::findOrFail($id);
+
+        $year = date('y');
+        $month = date('m');
+        $prefix = "PRD{$year}{$month}";
+
+        $lastProduct = Produk::where('kode_produk', 'LIKE', $prefix . '%')
+                        ->orderBy('kode_produk', 'desc')
+                        ->first();
+
+        $nextNumber = $lastProduct ? intval(substr($lastProduct->kode_produk, -3)) + 1 : 1;
+
+        $kodeOtomatis = $prefix . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
+
+        $satuan = ['Kg', 'Liter', 'Pcs', 'Pack', 'Botol'];
         $tanggalHariIni = date('d-m-Y');
 
-        return view('kelola.edit-produk', compact('produk', 'tanggalHariIni'));
+        return view('kelola.edit-produk', compact('produk', 'kodeOtomatis', 'satuan', 'tanggalHariIni'));
     }
 
-    // 🌿 UPDATE PRODUK
+    // 🌿 Update produk
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -107,9 +122,9 @@ class ProdukController extends Controller
             'tanggal_input'       => 'required|date',
             'nama_produk'         => 'required|string|max:255',
             'nama_pemasok'        => 'required|string|max:255',
-            'kategori_produk'     => 'required|string|max:100',
+            'kategori_produk'     => 'required|string|max:100', // input teks
             'stok_produk'         => 'required|integer|min:0',
-            'satuan_produk'       => 'required|string|max:50',
+            'satuan_produk'       => 'required|string|max:50',  // dropdown tetap string
             'harga_jual'          => 'required|numeric|min:0',
             'harga_beli'          => 'required|numeric|min:0',
             'deskripsi_produk'    => 'nullable|string',

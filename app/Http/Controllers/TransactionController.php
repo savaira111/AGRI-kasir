@@ -66,6 +66,11 @@ class TransactionController extends Controller
             'qris_image_url' => 'nullable|string',
         ]);
 
+        
+        if (!$request->produk_id || count($request->produk_id) < 1) {
+            return back()->withInput()->with('error', 'Pilih minimal 1 produk sebelum melakukan pembayaran!');
+        }
+
         DB::beginTransaction();
         try {
 

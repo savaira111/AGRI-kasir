@@ -94,7 +94,7 @@
                 {{-- Modal pembayaran --}}
                 @include('transactions.modal-payment')
 
-                <button type="button" class="btn btn-warning w-100" id="openModalPembayaran">Pembayaran</button>
+                <button type="button" class="btn btn-warning w-100" id="openModalPembayaran" disabled>Pembayaran</button>
             </div>
         </form>
     </div>
@@ -176,12 +176,14 @@ function addProduct(p) {
     document.getElementById('productList').innerHTML = "";
     document.getElementById('searchProduct').value = "";
     updateTotal();
+    togglePembayaranButton(); // update tombol bayar
 }
 
 // REMOVE PRODUK
 function removeItem(id) {
     document.getElementById('row-' + id).remove();
     updateTotal();
+    togglePembayaranButton(); // update tombol bayar
 }
 
 // UPDATE TOTAL & CEK STOK
@@ -196,6 +198,7 @@ document.addEventListener('input', function(e) {
             new bootstrap.Modal(stokAlertModal).show();
         }
         updateTotal();
+        togglePembayaranButton(); // update tombol bayar
     }
 });
 
@@ -211,6 +214,19 @@ function updateTotal() {
     document.getElementById('totalDisplay').innerText = total;
     document.getElementById('totalInput').value = total;
 }
+
+// CEK ADA PRODUK
+function hasProducts() {
+    return document.querySelectorAll("#tableItems tbody tr").length > 0;
+}
+
+// TOMBOL BAYAR ENABLE/DISABLE
+function togglePembayaranButton() {
+    openModal.disabled = !hasProducts();
+}
+
+// Jalankan saat load
+document.addEventListener('DOMContentLoaded', togglePembayaranButton);
 
 // SWITCH METODE BAYAR
 const metodeBayar = document.getElementById("metodeBayar");
@@ -238,6 +254,11 @@ metodeBayar.addEventListener("change", function () {
 // MODAL / QRIS SUBMIT
 openModal.addEventListener("click", function () {
     updateTotal();
+    if (!hasProducts()) {
+        alert("Pilih minimal 1 produk sebelum melakukan pembayaran!");
+        return;
+    }
+
     const total = parseInt(document.getElementById("totalInput").value || 0);
     const metode = metodeBayar.value;
 

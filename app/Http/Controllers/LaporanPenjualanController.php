@@ -9,30 +9,26 @@ use Carbon\Carbon;
 
 class LaporanPenjualanController extends Controller
 {
-    // ============================
-    // TAMPILKAN LIST LAPORAN
-    // ============================
+    // ============================================
+    //  TAMPILKAN HALAMAN LAPORAN
+    // ============================================
     public function index(Request $request)
     {
         $laporanList = LaporanPenjualan::orderBy('id_laporan', 'desc')->get();
-
-        // Ringkasan laporan terakhir
         $laporanTerakhir = LaporanPenjualan::orderBy('id_laporan', 'desc')->first();
 
-        $filterBulan = $request->input('bulan');
-        $filterTahun = $request->input('tahun');
-
         return view('laporan.index', [
-            'laporanList' => $laporanList,
+            'laporanList'   => $laporanList,
             'laporanTerakhir' => $laporanTerakhir,
-            'filterBulan' => $filterBulan,
-            'filterTahun' => $filterTahun,
+            'filterBulan'   => $request->bulan,
+            'filterTahun'   => $request->tahun,
+            'isGenerated'   => false,   // ⬅ default
         ]);
     }
 
-    // ============================
-    // GENERATE LAPORAN BULANAN MANUAL
-    // ============================
+    // ============================================
+    //  GENERATE LAPORAN MANUAL
+    // ============================================
     public function generate(Request $request)
     {
         $request->validate([
@@ -45,16 +41,16 @@ class LaporanPenjualanController extends Controller
 
         $periode = Carbon::createFromDate($tahun, $bulan, 1)->format('F Y');
 
-        // Ambil total penjualan dan transaksi dari tabel transaksi
+        // Hitung nilai laporan
         $totalPenjualan = Transaction::whereMonth('created_at', $bulan)
-                            ->whereYear('created_at', $tahun)
-                            ->sum('total_harga');
+            ->whereYear('created_at', $tahun)
+            ->sum('total_harga');
 
         $totalTransaksi = Transaction::whereMonth('created_at', $bulan)
-                            ->whereYear('created_at', $tahun)
-                            ->count();
+            ->whereYear('created_at', $tahun)
+            ->count();
 
-        // updateOrCreate agar tidak duplicate laporan
+        // Simpan/update laporan
         LaporanPenjualan::updateOrCreate(
             ['periode' => $periode],
             [
@@ -63,23 +59,46 @@ class LaporanPenjualanController extends Controller
             ]
         );
 
-        return redirect()->route('laporan.index')->with('success', "Laporan untuk periode $periode berhasil dibuat!");
+        // Re-fetch setelah insert/update
+        $laporanList = LaporanPenjualan::orderBy('id_laporan', 'desc')->get();
+        $laporanTerakhir = LaporanPenjualan::orderBy('id_laporan', 'desc')->first();
+
+        // RETURN TIDAK REDIRECT (fix utama)
+        return view('laporan.index', [
+            'laporanList'     => $laporanList,
+            'laporanTerakhir' => $laporanTerakhir,
+            'filterBulan'     => $bulan,
+            'filterTahun'     => $tahun,
+            'isGenerated'     => true,     // ⬅ penanda agar tampilan berubah
+        ])->with('success', "Laporan untuk periode $periode berhasil dibuat!");
     }
 
-    // ============================
-    // EXPORT PDF LAPORAN
-    // ============================
+    // ============================================
+    //  EXPORT PDF
+    // ============================================
     public function exportPdf($id_laporan)
     {
         $laporan = LaporanPenjualan::findOrFail($id_laporan);
 
-        $pdf = \PDF::loadView('laporan.pdf', compact('laporan'));
+        // Ambil transaksi sesuai periode laporan
+        $bulan = Carbon::parse($laporan->periode)->format('m');
+        $tahun = Carbon::parse($laporan->periode)->format('Y');
+
+        $transaksi = Transaction::whereMonth('created_at', $bulan)
+            ->whereYear('created_at', $tahun)
+            ->get();
+
+        $pdf = \PDF::loadView('laporan.pdf', [
+            'laporan' => $laporan,
+            'transaksi' => $transaksi
+        ]);
+
         return $pdf->download('Laporan-' . $laporan->periode . '.pdf');
     }
 
-    // ============================
-    // UPDATE LAPORAN OTOMATIS SETELAH TRANSAKSI
-    // ============================
+    // ============================================
+    //  UPDATE LAPORAN OTOMATIS KETIKA ADA TRANSAKSI
+    // ============================================
     public static function updateLaporanAfterTransaction(Transaction $transaction)
     {
         $periode = Carbon::parse($transaction->created_at)->format('F Y');

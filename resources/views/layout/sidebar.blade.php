@@ -18,7 +18,7 @@
             </a>
         </li>
         <li>
-            <a href="{{ route('laporan.index') }}">
+            <a href="{{ route('laporan.index') }}" class="{{ request()->routeIs('laporan.index') ? 'active' : '' }}">
         <i class="bi bi-bar-chart-line-fill"></i> <span>Laporan</span>
         </a>
 

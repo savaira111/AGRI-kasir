@@ -48,15 +48,7 @@
                     <input type="text" id="modalTotal" class="form-control form-mini mt-1" readonly>
                 </div>
 
-                <!-- METODE PEMBAYARAN -->
-                <div class="mb-3">
-                    <span class="label-text">Metode Pembayaran :</span><br>
-                    <select id="metodePembayaran" class="form-control form-mini mt-1">
-                        <option value="cash">Cash</option>
-                        <option value="qris">QRIS</option>
-                    </select>
-                </div>
-
+                
                 <!-- BOX CASH / QRIS -->
                 <div class="p-3 rounded" style="background:rgba(255,255,255,0.65);">
 
