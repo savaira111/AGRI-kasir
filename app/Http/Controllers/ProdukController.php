@@ -41,10 +41,9 @@ class ProdukController extends Controller
 
         $kodeOtomatis = $prefix . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
 
-        $satuan = ['Kg', 'Liter', 'Pcs', 'Pack', 'Botol'];
         $tanggalHariIni = date('d-m-Y');
 
-        return view('kelola.tambah-produk', compact('kodeOtomatis', 'satuan', 'tanggalHariIni'));
+        return view('kelola.tambah-produk', compact('kodeOtomatis', 'tanggalHariIni'));
     }
 
     // 🌿 Simpan produk baru
@@ -55,8 +54,8 @@ class ProdukController extends Controller
             'nama_produk' => 'required|string|max:255',
             'nama_pemasok' => 'nullable|string|max:255',
             'stok_produk' => 'required|integer|min:0',
-            'harga_jual' => 'nullable|numeric|min:0',  // decimal support
-            'harga_beli' => 'nullable|numeric|min:0',  // decimal support
+            'harga_jual' => 'nullable|numeric|min:0',
+            'harga_beli' => 'nullable|numeric|min:0',
             'kategori_produk' => 'nullable|string|max:100',
             'satuan_produk' => 'nullable|string|max:50',
             'foto_produk' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
@@ -95,23 +94,9 @@ class ProdukController extends Controller
     public function edit($id)
     {
         $produk = Produk::findOrFail($id);
-
-        $year = date('y');
-        $month = date('m');
-        $prefix = "PRD{$year}{$month}";
-
-        $lastProduct = Produk::where('kode_produk', 'LIKE', $prefix . '%')
-                        ->orderBy('kode_produk', 'desc')
-                        ->first();
-
-        $nextNumber = $lastProduct ? intval(substr($lastProduct->kode_produk, -3)) + 1 : 1;
-
-        $kodeOtomatis = $prefix . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
-
-        $satuan = ['Kg', 'Liter', 'Pcs', 'Pack', 'Botol'];
         $tanggalHariIni = date('d-m-Y');
 
-        return view('kelola.edit-produk', compact('produk', 'kodeOtomatis', 'satuan', 'tanggalHariIni'));
+        return view('kelola.edit-produk', compact('produk', 'tanggalHariIni'));
     }
 
     // 🌿 UPDATE PRODUK
@@ -125,8 +110,8 @@ class ProdukController extends Controller
             'kategori_produk'     => 'required|string|max:100',
             'stok_produk'         => 'required|integer|min:0',
             'satuan_produk'       => 'required|string|max:50',
-            'harga_jual'          => 'required|numeric|min:0',  // decimal support
-            'harga_beli'          => 'required|numeric|min:0',  // decimal support
+            'harga_jual'          => 'required|numeric|min:0',
+            'harga_beli'          => 'required|numeric|min:0',
             'deskripsi_produk'    => 'nullable|string',
             'tanggal_kadaluarsa'  => 'required|date|after_or_equal:tanggal_input',
             'foto_produk'         => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
@@ -146,7 +131,6 @@ class ProdukController extends Controller
         $produk->deskripsi_produk   = $request->deskripsi_produk;
         $produk->tanggal_kadaluarsa = $request->tanggal_kadaluarsa;
 
-        // Foto tetap bisa update
         if ($request->hasFile('foto_produk')) {
             if ($produk->foto_produk && Storage::disk('public')->exists($produk->foto_produk)) {
                 Storage::disk('public')->delete($produk->foto_produk);

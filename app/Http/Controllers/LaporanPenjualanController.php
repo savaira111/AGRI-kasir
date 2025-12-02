@@ -2,96 +2,95 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\LaporanPenjualan;
 use App\Models\Transaction;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use PDF;
+use Carbon\Carbon;
 
 class LaporanPenjualanController extends Controller
 {
-    // ======================================================
-    //  TAMPILKAN LIST LAPORAN + RINGKASAN PERIODE TERAKHIR
-    // ======================================================
+    // ============================
+    // TAMPILKAN LIST LAPORAN
+    // ============================
     public function index(Request $request)
     {
-        // Ambil semua laporan, urut dari terbaru
-        $laporanList = LaporanPenjualan::with('pembuat')
-                            ->orderBy('created_at', 'DESC')
-                            ->get();
+        $laporanList = LaporanPenjualan::orderBy('id_laporan', 'desc')->get();
 
-        // Ambil laporan terakhir (periode terbaru) untuk ringkasan
-        $laporanTerakhir = $laporanList->first();
+        // Ringkasan laporan terakhir
+        $laporanTerakhir = LaporanPenjualan::orderBy('id_laporan', 'desc')->first();
 
-        return view('laporan.index', compact('laporanList', 'laporanTerakhir'));
+        $filterBulan = $request->input('bulan');
+        $filterTahun = $request->input('tahun');
+
+        return view('laporan.index', [
+            'laporanList' => $laporanList,
+            'laporanTerakhir' => $laporanTerakhir,
+            'filterBulan' => $filterBulan,
+            'filterTahun' => $filterTahun,
+        ]);
     }
 
-    // ======================================================
-    //  GENERATE LAPORAN BARU
-    // ======================================================
+    // ============================
+    // GENERATE LAPORAN BULANAN MANUAL
+    // ============================
     public function generate(Request $request)
     {
         $request->validate([
             'bulan' => 'required|integer|min:1|max:12',
-            'tahun' => 'required|integer|min:2000'
+            'tahun' => 'required|integer|min:2000',
         ]);
 
         $bulan = $request->bulan;
         $tahun = $request->tahun;
 
-        $transaksi = Transaction::whereMonth('tanggal_transaksi', $bulan)
-                                ->whereYear('tanggal_transaksi', $tahun)
-                                ->get();
+        $periode = Carbon::createFromDate($tahun, $bulan, 1)->format('F Y');
 
-        if ($transaksi->count() < 1) {
-            return back()->with('error', 'Tidak ada transaksi di periode tersebut.');
-        }
+        // Ambil total penjualan dan transaksi dari tabel transaksi
+        $totalPenjualan = Transaction::whereMonth('created_at', $bulan)
+                            ->whereYear('created_at', $tahun)
+                            ->sum('total_harga');
 
-        $totalPenjualan = $transaksi->sum('total_harga');
-        $totalTransaksi = $transaksi->count();
+        $totalTransaksi = Transaction::whereMonth('created_at', $bulan)
+                            ->whereYear('created_at', $tahun)
+                            ->count();
 
-        $periode = $bulan . '-' . $tahun;
-
-        $existing = LaporanPenjualan::where('periode', $periode)->first();
-
-        if ($existing) {
-            $existing->update([
+        // updateOrCreate agar tidak duplicate laporan
+        LaporanPenjualan::updateOrCreate(
+            ['periode' => $periode],
+            [
                 'total_penjualan' => $totalPenjualan,
                 'total_transaksi' => $totalTransaksi,
-                'dibuat_oleh'    => Auth::id()
-            ]);
+            ]
+        );
 
-            return back()->with('success', 'Laporan periode tersebut sudah ada. Data berhasil diperbarui.');
-        }
-
-        LaporanPenjualan::create([
-            'periode'         => $periode,
-            'total_penjualan' => $totalPenjualan,
-            'total_transaksi' => $totalTransaksi,
-            'dibuat_oleh'     => Auth::id()
-        ]);
-
-        return back()->with('success', 'Laporan berhasil dibuat.');
+        return redirect()->route('laporan.index')->with('success', "Laporan untuk periode $periode berhasil dibuat!");
     }
 
-    // ======================================================
-    //  EXPORT PDF LAPORAN
-    // ======================================================
-    public function exportPdf($id)
+    // ============================
+    // EXPORT PDF LAPORAN
+    // ============================
+    public function exportPdf($id_laporan)
     {
-        $laporan = LaporanPenjualan::findOrFail($id);
+        $laporan = LaporanPenjualan::findOrFail($id_laporan);
 
-        [$bulan, $tahun] = explode('-', $laporan->periode);
+        $pdf = \PDF::loadView('laporan.pdf', compact('laporan'));
+        return $pdf->download('Laporan-' . $laporan->periode . '.pdf');
+    }
 
-        $transaksi = Transaction::whereMonth('tanggal_transaksi', $bulan)
-                                ->whereYear('tanggal_transaksi', $tahun)
-                                ->get();
+    // ============================
+    // UPDATE LAPORAN OTOMATIS SETELAH TRANSAKSI
+    // ============================
+    public static function updateLaporanAfterTransaction(Transaction $transaction)
+    {
+        $periode = Carbon::parse($transaction->created_at)->format('F Y');
 
-        $pdf = PDF::loadView('laporan.pdf', [
-            'laporan'   => $laporan,
-            'transaksi' => $transaksi
-        ])->setPaper('a4', 'portrait');
+        $laporan = LaporanPenjualan::firstOrCreate(
+            ['periode' => $periode],
+            ['total_penjualan' => 0, 'total_transaksi' => 0]
+        );
 
-        return $pdf->download('Laporan_Penjualan_' . $laporan->periode . '.pdf');
+        $laporan->total_penjualan += $transaction->total_harga;
+        $laporan->total_transaksi += 1;
+        $laporan->save();
     }
 }

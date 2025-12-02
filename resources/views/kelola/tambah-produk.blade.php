@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tambah Produk - AGRI</title>
 
-    <!-- Bootstrap & Icon & Font -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
@@ -25,137 +24,71 @@
         <form action="{{ route('produk.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
-            <!-- Kode Produk Otomatis -->
             <div class="mb-3">
                 <label for="kode_produk" class="form-label fw-semibold">Kode Produk</label>
                 <input type="text" id="kode_produk" name="kode_produk" class="form-control" value="{{ $kodeOtomatis }}" readonly>
             </div>
 
-            <!-- Tanggal Input Otomatis -->
             <div class="mb-3">
                 <label for="tanggal_input" class="form-label fw-semibold">Tanggal Input</label>
                 <input type="date" id="tanggal_input" name="tanggal_input" class="form-control"
                        value="{{ old('tanggal_input', date('Y-m-d')) }}" required>
             </div>
 
-            <!-- Nama Produk -->
             <div class="mb-3">
                 <label for="nama_produk" class="form-label fw-semibold">Nama Produk</label>
-                <input type="text" id="nama_produk" name="nama_produk"
-                       class="form-control @error('nama_produk') is-invalid @enderror"
-                       placeholder="Isi nama produk" value="{{ old('nama_produk') }}" required>
-                @error('nama_produk')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
+                <input type="text" id="nama_produk" name="nama_produk" class="form-control" placeholder="Isi nama produk" value="{{ old('nama_produk') }}" required>
             </div>
 
-            <!-- Nama Pemasok -->
             <div class="mb-3">
                 <label for="nama_pemasok" class="form-label fw-semibold">Nama Pemasok</label>
-                <input type="text" id="nama_pemasok" name="nama_pemasok"
-                       class="form-control @error('nama_pemasok') is-invalid @enderror"
-                       placeholder="Isi nama pemasok" value="{{ old('nama_pemasok') }}" required>
-                @error('nama_pemasok')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
+                <input type="text" id="nama_pemasok" name="nama_pemasok" class="form-control" placeholder="Isi nama pemasok" value="{{ old('nama_pemasok') }}" required>
             </div>
 
-            <!-- Kategori Dropdown -->
+            <!-- Kategori Produk (Input biasa) -->
             <div class="mb-3">
-                <label for="kategori_produk_dropdown" class="form-label fw-semibold">Kategori Produk</label>
-                <select id="kategori_produk_dropdown" name="kategori_produk" class="form-select" required>
-                    @php
-                        $kategoriList = ['Pupuk', 'Bibit', 'Alat Pertanian', 'Obat', 'Lainnya'];
-                    @endphp
-                    @foreach($kategoriList as $k)
-                        <option value="{{ $k }}" {{ old('kategori_produk') == $k ? 'selected' : '' }}>{{ $k }}</option>
-                    @endforeach
-                </select>
+                <label for="kategori_produk" class="form-label fw-semibold">Kategori Produk</label>
+                <input type="text" id="kategori_produk" name="kategori_produk" class="form-control" placeholder="Isi kategori produk" value="{{ old('kategori_produk') }}">
             </div>
 
-            <!-- Satuan -->
-            <div class="mb-3">
-                <label for="satuan_produk_dropdown" class="form-label fw-semibold">Satuan</label>
-                <select id="satuan_produk_dropdown" name="satuan_produk" class="form-select" required>
-                    @php
-                        $satuanList = ['Kg', 'Liter', 'Pcs', 'Pack', 'Botol'];
-                    @endphp
-                    @foreach($satuanList as $s)
-                        <option value="{{ $s }}" {{ old('satuan_produk') == $s ? 'selected' : '' }}>{{ $s }}</option>
-                    @endforeach
-                </select>
-            </div>
-
-            <!-- Stok -->
             <div class="mb-3">
                 <label for="stok_produk" class="form-label fw-semibold">Stok</label>
-                <input type="number" id="stok_produk" name="stok_produk"
-                       class="form-control @error('stok_produk') is-invalid @enderror"
-                       placeholder="Isi stok produk" value="{{ old('stok_produk') }}" min="0" required>
-                @error('stok_produk')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
+                <input type="number" id="stok_produk" name="stok_produk" class="form-control" placeholder="Isi stok produk" value="{{ old('stok_produk') }}" min="0" required>
             </div>
 
-            <!-- Harga Jual -->
+            <!-- Satuan Produk (Input biasa) -->
+            <div class="mb-3">
+                <label for="satuan_produk" class="form-label fw-semibold">Satuan</label>
+                <input type="text" id="satuan_produk" name="satuan_produk" class="form-control" placeholder="Isi satuan produk" value="{{ old('satuan_produk') }}">
+            </div>
+
             <div class="mb-3">
                 <label for="harga_jual" class="form-label fw-semibold">Harga Jual</label>
-                <input type="number" id="harga_jual" name="harga_jual"
-                       class="form-control @error('harga_jual') is-invalid @enderror"
-                       placeholder="Isi harga jual produk" value="{{ old('harga_jual') }}" min="0" required>
-                @error('harga_jual')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
+                <input type="number" id="harga_jual" name="harga_jual" class="form-control" placeholder="Isi harga jual produk" value="{{ old('harga_jual') }}" min="0" required>
             </div>
 
-            <!-- Harga Beli -->
             <div class="mb-3">
                 <label for="harga_beli" class="form-label fw-semibold">Harga Beli</label>
-                <input type="number" id="harga_beli" name="harga_beli"
-                       class="form-control @error('harga_beli') is-invalid @enderror"
-                       placeholder="Isi harga beli produk" value="{{ old('harga_beli') }}" min="0" required>
-                @error('harga_beli')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
+                <input type="number" id="harga_beli" name="harga_beli" class="form-control" placeholder="Isi harga beli produk" value="{{ old('harga_beli') }}" min="0" required>
             </div>
 
-            <!-- Deskripsi -->
             <div class="mb-3">
                 <label for="deskripsi_produk" class="form-label fw-semibold">Deskripsi</label>
-                <textarea id="deskripsi_produk" name="deskripsi_produk" rows="2"
-                          class="form-control @error('deskripsi_produk') is-invalid @enderror"
-                          placeholder="Isi deskripsi produk">{{ old('deskripsi_produk') }}</textarea>
-                @error('deskripsi_produk')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
+                <textarea id="deskripsi_produk" name="deskripsi_produk" rows="2" class="form-control" placeholder="Isi deskripsi produk">{{ old('deskripsi_produk') }}</textarea>
             </div>
 
-            <!-- Tanggal Kadaluarsa -->
             <div class="mb-3">
                 <label for="tanggal_kadaluarsa" class="form-label fw-semibold">Tanggal Kadaluarsa</label>
-                <input type="date" id="tanggal_kadaluarsa" name="tanggal_kadaluarsa"
-                       class="form-control @error('tanggal_kadaluarsa') is-invalid @enderror"
-                       value="{{ old('tanggal_kadaluarsa') }}" required>
-                @error('tanggal_kadaluarsa')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
+                <input type="date" id="tanggal_kadaluarsa" name="tanggal_kadaluarsa" class="form-control" value="{{ old('tanggal_kadaluarsa') }}" required>
             </div>
 
-            <!-- Foto Produk -->
             <div class="mb-3">
                 <label for="foto_produk" class="form-label fw-semibold">Pilih Foto Produk</label>
-                <input type="file" id="foto_produk" name="foto_produk"
-                       class="form-control @error('foto_produk') is-invalid @enderror">
-                @error('foto_produk')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
+                <input type="file" id="foto_produk" name="foto_produk" class="form-control">
             </div>
 
             <div class="d-flex justify-content-end">
-                <button type="submit" class="btn fw-bold px-4"
-                        style="background-color: #FCCD2A; color: black; border-radius: 12px;">
-                    Simpan
-                </button>
+                <button type="submit" class="btn fw-bold px-4" style="background-color: #FCCD2A; color: black; border-radius: 12px;">Simpan</button>
             </div>
         </form>
     </div>
