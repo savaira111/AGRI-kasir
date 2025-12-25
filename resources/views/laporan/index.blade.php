@@ -129,22 +129,7 @@
         </div>
     </div>
 
-    {{-- RINGKASAN --}}
-    <div class="card shadow-sm mb-4" style="background:#D4EDC9;">
-        <div class="card-body">
-            <h5 class="fw-bold">Ringkasan Semua Periode:</h5>
-            <p class="fs-5">
-                Total Penjualan:
-                Rp {{ $laporanTerakhir ? number_format($laporanTerakhir->total_penjualan, 0, ',', '.') : '0' }}
-            </p>
-            <p class="fs-5">
-                Total Transaksi:
-                {{ $laporanTerakhir ? $laporanTerakhir->total_transaksi : '0' }} 
-            </p>
-            
-        </div>
-    </div>
-
+  
 </div>
 
 @endsection

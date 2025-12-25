@@ -7,6 +7,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LaporanPenjualanController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserController;
 
 // ==========================
 // AUTH (Login - Logout)
@@ -87,4 +88,9 @@ Route::middleware('auth')->group(function () {
      ->name('dashboard')
         ->middleware('auth');
 
+});
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('users', UserController::class);
 });

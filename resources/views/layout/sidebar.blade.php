@@ -23,5 +23,13 @@
         </a>
 
         </li>
+
+        <li>
+    <a href="{{ route('users.index') }}" class="{{ request()->routeIs('users.*') ? 'active' : '' }}">
+        <i class="bi bi-people-fill"></i>
+        <span>User</span>
+    </a>
+</li>
+
     </ul>
 </div>
